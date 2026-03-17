@@ -1,0 +1,39 @@
+.kpi-card {
+  background: #fff;
+  border: 1px solid var(--n-300);
+  border-radius: var(--r);
+  padding: 12px;
+  box-shadow: var(--sh-xs);
+  position: relative;
+  overflow: hidden;
+  transition: .2s;
+}
+.kpi-card:hover { box-shadow: var(--sh); transform: translateY(-1px); }
+.kpi-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 3px;
+  border-radius: var(--r) var(--r) 0 0;
+}
+.kpi-card.c-blue::before   { background: linear-gradient(90deg, var(--blue-700), var(--blue-500)); }
+.kpi-card.c-amber::before  { background: var(--amber);  }
+.kpi-card.c-green::before  { background: var(--green);  }
+.kpi-card.c-purple::before { background: var(--purple); }
+.kpi-card.c-red::before    { background: linear-gradient(90deg, var(--red-700), var(--red-400)); }
+.kc-lbl  { font-size: 9.5px; font-weight: 700; color: var(--n-600); text-transform: uppercase; letter-spacing: .07em; margin-bottom: 6px; }
+.kc-val  { font-family: var(--font-mono); font-size: 22px; font-weight: 600; line-height: 1; margin-bottom: 4px; }
+.kpi-card.c-blue   .kc-val { color: var(--blue-700); }
+.kpi-card.c-amber  .kc-val { color: var(--amber);    }
+.kpi-card.c-green  .kc-val { color: var(--green);    }
+.kpi-card.c-purple .kc-val { color: var(--purple);   }
+.kpi-card.c-red    .kc-val { color: var(--red-600);  }
+.kc-sub  { font-size: 10.5px; color: var(--n-600); margin-bottom: 7px; }
+.kc-foot { display: flex; align-items: center; gap: 6px; }
+.kc-prog { flex: 1; height: 4px; background: var(--n-200); border-radius: 2px; overflow: hidden; }
+.kc-bar  { height: 100%; border-radius: 2px; background: var(--primary); }
+.kc-pct  { font-family: var(--font-mono); font-size: 10.5px; font-weight: 600; color: var(--primary); }
+.kc-trend { font-size: 10px; font-weight: 600; padding: 2px 7px; border-radius: 8px; }
+.kc-trend.up      { background: var(--green-bg); color: var(--green); }
+.kc-trend.neutral { background: var(--n-200);    color: var(--n-600); }
+.kc-trend.down    { background: var(--red-100);  color: var(--red-600); }
