@@ -1,0 +1,329 @@
+<div class="adv-layout">
+
+  <!-- SUBHEADER -->
+  <div class="subhdr">
+    <div class="sub-left">
+      <span class="breadcrumb">Boutiques › <strong>Paris 15e</strong> › <strong>Karim Benali</strong></span>
+      <span class="advisor-badge">👤 Interface Conseiller</span>
+      <span class="sys-badge"><i class="sys-dot"></i> Connecté</span>
+    </div>
+    <div class="sub-right">
+      <button class="btn-ghost">📋 Mes objectifs</button>
+      <button class="btn-ghost">📊 Mon historique</button>
+      <button class="btn-primary" (click)="useQuick('Quel est mon conseil prioritaire maintenant ?')">
+        🤖 Coach maintenant
+      </button>
+    </div>
+  </div>
+
+  <!-- GRID 3 COLONNES -->
+  <div class="main-grid">
+
+    <!-- ══ GAUCHE — Profil + KPIs mobile ══ -->
+    <div class="left-panel">
+
+      <div class="mobile-card">
+        <div class="mobile-hdr">
+          <div class="mobile-notch"></div>
+          <span class="mobile-time">14:32</span>
+        </div>
+        <div class="mobile-body">
+          <div class="mb-row">
+            <div class="mb-av" style="background:linear-gradient(135deg,#DC2626,#7C3AED)">KB</div>
+            <div>
+              <div class="mb-name">Karim Benali</div>
+              <div class="mb-role">Conseiller Senior · 5G</div>
+            </div>
+            <div class="mb-score">
+              <div class="mb-score-val">0.91</div>
+              <div class="mb-score-lbl">Score IA</div>
+            </div>
+          </div>
+          <div class="mb-kpis">
+            <div class="mb-kpi"><div class="mb-kpi-val red">1 850€</div><div class="mb-kpi-lbl">Ventes</div></div>
+            <div class="mb-kpi"><div class="mb-kpi-val">2 000€</div><div class="mb-kpi-lbl">Objectif</div></div>
+            <div class="mb-kpi"><div class="mb-kpi-val green">93%</div><div class="mb-kpi-lbl">Atteinte</div></div>
+            <div class="mb-kpi"><div class="mb-kpi-val">7</div><div class="mb-kpi-lbl">Clients</div></div>
+          </div>
+          <div class="mb-prog-wrap">
+            <div class="mb-prog-row">
+              <span>Objectif journalier</span>
+              <span class="green-txt">93% ✓</span>
+            </div>
+            <div class="mb-prog-track">
+              <div class="mb-prog-fill" style="width:93%"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- KPI Cards -->
+      <div class="kpi-col">
+        @for (card of kpiCards; track card.label) {
+          <app-kpi-card [card]="card" />
+        }
+      </div>
+
+      <!-- Produits recommandés -->
+      <div class="left-section">
+        <p class="sec-mini-lbl">🔥 Produits · Contexte actuel</p>
+        <div class="prod-list">
+          @for (p of products.slice(0,4); track p.name) {
+            <div class="prod-row" [class.hot]="p.hot">
+              <span class="prod-ico">{{ p.icon }}</span>
+              <div class="prod-info">
+                <div class="prod-name">{{ p.name }}</div>
+                <div class="prod-cat">{{ p.cat }}</div>
+              </div>
+              <div class="prod-right">
+                <div class="prod-price">{{ p.price }}</div>
+                @if (p.hot) { <span class="hot-pill">🔥</span> }
+              </div>
+            </div>
+          }
+        </div>
+      </div>
+
+    </div>
+
+    <!-- ══ CENTRE — Classement équipe ══ -->
+    <div class="center-panel">
+
+      <p class="sec-label">Classement équipe · Aujourd'hui</p>
+      <div class="team-card">
+        <div class="team-hdr">
+          <span class="team-title">Performance · Paris 15</span>
+          <span class="team-meta">Mis à jour 14:32</span>
+        </div>
+        <table>
+          <thead>
+            <tr>
+              <th>#</th><th>Conseiller</th><th>CA Réalisé</th>
+              <th>Performance</th><th>Prévision EOD</th><th>Statut</th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (a of advisors; track a.initials; let i = $index) {
+              <tr [class.me]="a.initials === 'KB'">
+                <td><span class="rank-badge" [style.background]="rankColor(i)">{{ i+1 }}</span></td>
+                <td>
+                  <div class="adv-cell">
+                    <div class="tc-av" [style.background]="a.avatar">{{ a.initials }}</div>
+                    <div>
+                      <div class="tc-name">
+                        {{ a.name }}
+                        @if (a.initials === 'KB') { <span class="me-tag">Moi</span> }
+                      </div>
+                      <div class="tc-spec">{{ a.specialty }}</div>
+                    </div>
+                  </div>
+                </td>
+                <td>
+                  <div class="mono">{{ a.sales | currency:'EUR':'symbol':'1.0-0':'fr' }}</div>
+                  <div class="mono-sub">/ {{ a.target | currency:'EUR':'symbol':'1.0-0':'fr' }}</div>
+                </td>
+                <td>
+                  <div class="pb-wrap">
+                    <div class="pb">
+                      <div class="pb-fill"
+                           [style.width.%]="perf(a.sales,a.target)"
+                           [style.background]="perfColor(perf(a.sales,a.target))"></div>
+                    </div>
+                    <span class="mono" [style.color]="perfColor(perf(a.sales,a.target))">
+                      {{ perf(a.sales,a.target) }}%
+                    </span>
+                  </div>
+                </td>
+                <td>
+                  <span class="mono" [style.color]="perfColor(perf(a.forecast,a.target))">
+                    {{ a.forecast | currency:'EUR':'symbol':'1.0-0':'fr' }}
+                  </span>
+                </td>
+                <td>
+                  <span class="st-pill" [class]="a.status">
+                    {{ ({sent:'⏱ Envoyé', urgent:'🔴 Urgent', waiting:'⏳ Attente'})[a.status] }}
+                  </span>
+                </td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Grille produits complète -->
+      <p class="sec-label">Produits recommandés · Contexte pluie</p>
+      <div class="products-grid">
+        @for (p of products; track p.name) {
+          <div class="prod-card" [class.hot]="p.hot">
+            @if (p.hot) { <span class="hot-badge">🔥</span> }
+            <div class="prod-icon">{{ p.icon }}</div>
+            <div class="prod-name-lg">{{ p.name }}</div>
+            <div class="prod-cat-lg">{{ p.cat }}</div>
+            <div class="prod-price-lg">{{ p.price }}</div>
+            <div [class]="p.margin === 'Élevée' || p.margin === 'Haute' ? 'margin-high' : 'margin-med'">
+              Marge {{ p.margin }}
+            </div>
+            <button class="prod-btn" (click)="useQuick('Script de vente pour ' + p.name + ' ?')">
+              Script IA →
+            </button>
+          </div>
+        }
+      </div>
+
+    </div>
+
+    <!-- ══ DROITE — CoachAgent IA ══ -->
+    <div class="right-panel">
+
+      <!-- Tabs -->
+      <div class="panel-tabs">
+        <button class="tab-btn" [class.active]="activeTab === 'chat'"
+          (click)="activeTab = 'chat'">
+          🤖 CoachAgent
+        </button>
+        <button class="tab-btn" [class.active]="activeTab === 'notifs'"
+          (click)="activeTab = 'notifs'; chat.markAllRead()">
+          🔔 Alertes
+          @if (chat.unreadCount() > 0) {
+            <span class="notif-bubble">{{ chat.unreadCount() }}</span>
+          }
+        </button>
+      </div>
+
+      <!-- TAB CHAT COACH -->
+      @if (activeTab === 'chat') {
+
+        <div class="chat-hdr">
+          <div class="chat-ai-icon">🤖</div>
+          <div class="chat-ai-info">
+            <div class="chat-ai-name">CoachAgent IA</div>
+            <div class="chat-ai-sub">Ton coach personnel · Temps réel</div>
+          </div>
+          <span class="model-tag">Claude</span>
+        </div>
+
+        <!-- Contexte actif -->
+        <div class="ctx-banner">
+          <span class="ctx-chip">🌧 Pluie +40%</span>
+          <span class="ctx-chip">⏱ 3h28</span>
+          <span class="ctx-chip">🎯 93% obj.</span>
+          <span class="ctx-chip">👥 12 vis.</span>
+        </div>
+
+        <!-- Messages -->
+        <div class="chat-msgs" #msgContainer>
+          @for (msg of chat.messages(); track msg.id) {
+            <div class="msg-wrap" [class.is-user]="msg.role === 'user'">
+              <div class="msg-av" [class]="msg.role === 'ai' ? 'ai-av' : 'usr-av'">
+                {{ msg.role === 'ai' ? '🤖' : 'KB' }}
+              </div>
+              <div class="msg-content">
+                <div class="msg-bubble" [class]="msg.role + '-bubble'">
+                  <span [innerHTML]="msg.content | markdown"></span>
+                </div>
+                <div class="msg-meta">
+                  <span class="msg-time">{{ msg.timestamp | date:'HH:mm' }}</span>
+                  @if (msg.auditScore) {
+                    <span class="audit-badge">✓ {{ msg.auditScore | number:'1.2-2' }}</span>
+                  }
+                  @if (msg.role === 'ai') {
+                    <button class="fb-mini"
+                      (click)="chat.setFeedback(msg.id, 'up')"
+                      [class.active]="msg.feedback === 'up'">👍</button>
+                    <button class="fb-mini"
+                      (click)="chat.setFeedback(msg.id, 'down')"
+                      [class.active]="msg.feedback === 'down'">👎</button>
+                  }
+                </div>
+              </div>
+            </div>
+          }
+
+          @if (chat.isLoading()) {
+            <div class="msg-wrap">
+              <div class="msg-av ai-av">🤖</div>
+              <div class="typing-bubble">
+                <span class="t-dot"></span>
+                <span class="t-dot"></span>
+                <span class="t-dot"></span>
+              </div>
+            </div>
+          }
+
+          @if (chat.hasError()) {
+            <div class="error-banner">
+              ⚠️ {{ chat.error() }}
+              <button (click)="chat.clear()">Réessayer</button>
+            </div>
+          }
+        </div>
+
+        <!-- Questions rapides -->
+        <div class="qq-sec">
+          <p class="qq-lbl">Coaching rapide</p>
+          <div class="qq-grid">
+            @for (q of quickQuestions; track q) {
+              <button class="qq-chip" (click)="useQuick(q)">{{ q }}</button>
+            }
+          </div>
+        </div>
+
+        <!-- Input -->
+        <div class="input-sec">
+          <div class="input-wrap">
+            <textarea class="chat-ta" rows="1"
+              placeholder="Pose ta question au coach… (↵ Envoyer)"
+              [(ngModel)]="chatInput"
+              (keydown.enter)="onEnter($event)">
+            </textarea>
+            <button class="send-btn" [disabled]="chat.isLoading()" (click)="sendMessage()">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none"
+                   stroke="white" stroke-width="2.5" stroke-linecap="round">
+                <line x1="22" y1="2" x2="11" y2="13"/>
+                <polygon points="22 2 15 22 11 13 2 9 22 2"/>
+              </svg>
+            </button>
+          </div>
+          <div class="input-hint">↵ Envoyer · Shift+↵ Nouvelle ligne</div>
+        </div>
+
+      }
+
+      <!-- TAB ALERTES -->
+      @if (activeTab === 'notifs') {
+
+        <div class="notifs-hdr">
+          <div>
+            <div class="notifs-title">🔔 Alertes temps réel</div>
+            <div class="notifs-sub">{{ chat.unreadCount() }} non lues</div>
+          </div>
+          <button class="mark-read-btn" (click)="chat.markAllRead()">✓ Tout lu</button>
+        </div>
+
+        <div class="notifs-list">
+          @for (n of chat.notifications(); track n.id) {
+            <div class="notif-card" [class]="n.severity" [class.unread]="!n.read"
+                 (click)="chat.markRead(n.id)">
+              <div class="nc-left">
+                <span class="nc-icon">{{ severityIcon(n.severity) }}</span>
+                @if (!n.read) { <span class="nc-dot"></span> }
+              </div>
+              <div class="nc-body">
+                <div class="nc-title">{{ n.title }}</div>
+                <div class="nc-msg">{{ n.message }}</div>
+                <div class="nc-time">{{ n.time }}</div>
+              </div>
+              <span class="nc-type-badge" [class]="n.type">{{ n.type }}</span>
+            </div>
+          }
+          @if (chat.notifications().length === 0) {
+            <div class="notifs-empty"><span>🔔</span><p>Aucune alerte</p></div>
+          }
+        </div>
+
+      }
+
+    </div>
+
+  </div>
+</div>

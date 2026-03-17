@@ -1,0 +1,195 @@
+<div class="chat-layout">
+
+  <!-- ══════════ GAUCHE — Sidebar conversations ══════════ -->
+  <div class="sidebar">
+
+    <!-- Recherche -->
+    <div class="sidebar-search">
+      <div class="search-wrap">
+        <span class="search-icon">🔍</span>
+        <input
+          class="search-input"
+          type="text"
+          placeholder="Rechercher…"
+          [(ngModel)]="searchInput" />
+      </div>
+    </div>
+
+    <!-- Label conversations -->
+    <div class="sidebar-section-label">
+      <span>Conversations</span>
+      <span class="conv-count">{{ conversations.length }}</span>
+    </div>
+
+    <!-- Liste conversations -->
+    <div class="conv-list">
+      @for (c of filteredConversations; track c.id) {
+        <div class="conv-item" [class.active]="c.active" (click)="selectConversation(c.id)">
+          <div class="conv-icon">🤖</div>
+          <div class="conv-body">
+            <div class="conv-row">
+              <span class="conv-title">{{ c.title }}</span>
+              <span class="conv-time">{{ c.time }}</span>
+            </div>
+            <div class="conv-preview">{{ c.preview }}</div>
+          </div>
+          @if (c.unread) {
+            <span class="conv-dot"></span>
+          }
+        </div>
+      }
+    </div>
+
+    <!-- Métriques session -->
+    <div class="session-metrics">
+      <p class="metrics-label">Session actuelle</p>
+      <div class="metrics-grid">
+        @for (m of sessionMetrics; track m.label) {
+          <div class="metric-cell" [class]="'mc-' + m.color">
+            <div class="mc-val">{{ m.value }}</div>
+            <div class="mc-lbl">{{ m.label }}</div>
+          </div>
+        }
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ══════════ DROITE — Chat fullscreen ══════════ -->
+  <div class="chat-main">
+
+    <!-- Header chat -->
+    <div class="chat-hdr">
+      <div class="chat-hdr-left">
+        <div class="chat-ai-icon">🤖</div>
+        <div>
+          <div class="chat-ai-name">CoachAgent IA</div>
+          <div class="chat-ai-sub">Assistant stratégie vente · Telco Retail</div>
+        </div>
+      </div>
+      <div class="ctx-chips">
+        <span class="ctx-chip">🌧 Pluie +40%</span>
+        <span class="ctx-chip">⏱ 3h28 restantes</span>
+        <span class="ctx-chip">📊 CA −46%</span>
+        <span class="ctx-chip">👥 12 visiteurs</span>
+        <span class="ctx-chip">🏪 Paris 15</span>
+      </div>
+      <div class="chat-hdr-right">
+        <span class="model-tag">Claude Sonnet</span>
+        <span class="audit-tag">Audit actif</span>
+        <button class="hdr-btn" (click)="chat.clear()">🗑 Vider</button>
+      </div>
+    </div>
+
+    <!-- Messages -->
+    <div class="chat-msgs" #msgContainer>
+
+      <!-- Message d'accueil si 1 seul message -->
+      @if (chat.messages().length <= 1) {
+        <div class="welcome-banner">
+          <div class="wb-icon">🤖</div>
+          <div class="wb-title">CoachAgent IA · Mode Chat</div>
+          <div class="wb-sub">Posez vos questions stratégie, demandez des scripts, analysez votre performance</div>
+          <div class="wb-chips">
+            <span class="wb-chip">📊 Analyser mon CA</span>
+            <span class="wb-chip">🎯 Plan pour atteindre l'objectif</span>
+            <span class="wb-chip">💬 Script de vente 5G</span>
+          </div>
+        </div>
+      }
+
+      @for (msg of chat.messages(); track msg.id) {
+        <div class="msg-wrap" [class.is-user]="msg.role === 'user'">
+
+          <div class="msg-av" [class]="msg.role === 'ai' ? 'ai-av' : 'usr-av'">
+            {{ msg.role === 'ai' ? '🤖' : 'KB' }}
+          </div>
+
+          <div class="msg-content">
+            <div class="msg-bubble" [class]="msg.role + '-bubble'">
+              <span [innerHTML]="msg.content | markdown"></span>
+            </div>
+            <div class="msg-meta">
+              <span class="msg-time">{{ msg.timestamp | date:'HH:mm' }}</span>
+              @if (msg.auditScore) {
+                <span class="audit-badge">✓ Audit {{ msg.auditScore | number:'1.2-2' }}</span>
+              }
+              @if (msg.role === 'ai') {
+                <button class="fb-mini"
+                  (click)="chat.setFeedback(msg.id, 'up')"
+                  [class.active]="msg.feedback === 'up'">👍</button>
+                <button class="fb-mini"
+                  (click)="chat.setFeedback(msg.id, 'down')"
+                  [class.active]="msg.feedback === 'down'">👎</button>
+                <button class="fb-mini">📋 Copier</button>
+              }
+            </div>
+          </div>
+
+        </div>
+      }
+
+      <!-- Typing indicator -->
+      @if (chat.isLoading()) {
+        <div class="msg-wrap">
+          <div class="msg-av ai-av">🤖</div>
+          <div class="typing-bubble">
+            <span class="t-dot"></span>
+            <span class="t-dot"></span>
+            <span class="t-dot"></span>
+          </div>
+        </div>
+      }
+
+      <!-- Erreur -->
+      @if (chat.hasError()) {
+        <div class="error-banner">
+          ⚠️ {{ chat.error() }}
+          <button (click)="chat.clear()">Réessayer</button>
+        </div>
+      }
+
+    </div>
+
+    <!-- Quick questions -->
+    <div class="qq-sec">
+      <p class="qq-lbl">Suggestions rapides</p>
+      <div class="qq-scroll">
+        @for (q of quickQuestions; track q) {
+          <button class="qq-chip" (click)="useQuick(q)">{{ q }}</button>
+        }
+      </div>
+    </div>
+
+    <!-- Input -->
+    <div class="input-sec">
+      <div class="input-wrap">
+        <textarea
+          class="chat-ta"
+          rows="1"
+          placeholder="Posez votre question… (↵ Envoyer · Shift+↵ Nouvelle ligne)"
+          [(ngModel)]="chatInput"
+          (keydown.enter)="onEnter($event)">
+        </textarea>
+        <div class="input-actions">
+          <button class="send-btn" [disabled]="chat.isLoading()" (click)="sendMessage()">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none"
+                 stroke="white" stroke-width="2.5" stroke-linecap="round">
+              <line x1="22" y1="2" x2="11" y2="13"/>
+              <polygon points="22 2 15 22 11 13 2 9 22 2"/>
+            </svg>
+          </button>
+        </div>
+      </div>
+      <div class="input-footer">
+        <span class="input-hint">↵ Envoyer · Shift+↵ Nouvelle ligne</span>
+        <div class="ctx-tags">
+          <span class="ctx-tag">Paris 15</span>
+          <span class="ctx-tag">Karim B.</span>
+          <span class="ctx-tag">Session #4</span>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>

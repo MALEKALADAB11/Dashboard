@@ -1,0 +1,273 @@
+<div class="db-layout">
+
+  <!-- ── SUBHEADER ─────────────────────────────────────────────── -->
+  <div class="subhdr">
+    <div class="sub-left">
+      <span class="breadcrumb">Boutiques › <strong>Île-de-France</strong> › <strong>Paris 15e</strong></span>
+      <span class="store-badge">🏪 Paris 15 · Beaugrenelle</span>
+      <span class="sys-badge"><i class="sys-dot"></i> Système nominal</span>
+    </div>
+    <div class="sub-right">
+      <button class="btn-ghost">⟳ Actualiser</button>
+      <button class="btn-ghost">⤓ Exporter</button>
+      <button class="btn-primary">+ Générer coaching</button>
+    </div>
+  </div>
+
+  <!-- ── GRID 3 COLONNES ────────────────────────────────────────── -->
+  <div class="main-grid">
+
+    <!-- ══════════ GAUCHE — Conseiller ══════════ -->
+    <div class="left-panel">
+
+      <!-- <div class="panel-hdr">
+        <p class="panel-tag">Interface conseiller · Vue mobile</p>
+        <div class="adv-row">
+          <div class="adv-av" style="background:linear-gradient(135deg,#2563eb,#7c3aed)">KB</div>
+          <div>
+            <div class="adv-name">Karim Benali</div>
+            <div class="adv-role">Conseiller Senior · 5G</div>
+          </div>
+          <span class="green-badge">+0.91</span>
+        </div>
+      </div> -->
+
+      <div class="prog-sec">
+        <div class="prog-row">
+          <span class="prog-lbl">Objectif journalier</span>
+          <span class="prog-pct">53% · 3h28</span>
+        </div>
+        <div class="prog-track"><div class="prog-fill" style="width:53%"></div></div>
+      </div>
+      <div class="kpi-strip">
+        <div class="km"><div class="km-v" style="color:var(--blue-700)">4 250€</div><div class="km-l">Ventes</div></div>
+        <div class="km"><div class="km-v">8 000€</div><div class="km-l">Objectif</div></div>
+        <div class="km"><div class="km-v" style="color:var(--red-600)">−46%</div><div class="km-l">Gap EOD</div></div>
+        <div class="km"><div class="km-v">12</div><div class="km-l">Visiteurs</div></div>
+      </div>
+
+
+      <div class="scroll-area">
+
+        <!-- Coaching Card -->
+        <div class="coach-card">
+          <div class="cc-hdr">
+            <div class="cc-icon">🤖</div>
+            <div>
+              <div class="cc-title">Conseil IA · CoachAgent</div>
+              <div class="cc-sub">Il y a 2 min · Mistral-7B · Audit ✓</div>
+            </div>
+            <span class="cc-score">0.84</span>
+          </div>
+          <div class="cc-body">
+            <div class="ctx-box">🌧 Pluie + trafic élevé → accessoires +40%</div>
+            <p class="cc-text">La boutique affiche <strong>12 visiteurs actifs</strong>.
+              Prévision EOD <strong>6 800€</strong> — effort ciblé requis.</p>
+            <div class="action-pills">
+              <div class="a-pill">
+                <div class="a-icon amb">📱</div>
+                <div><div class="a-name">Upsell Accessoires</div><div class="a-detail">Protection · +65€ panier</div></div>
+                <span class="a-badge blue">+40%</span>
+              </div>
+              <div class="a-pill">
+                <div class="a-icon grn">📶</div>
+                <div><div class="a-name">Upgrade 5G Premium</div><div class="a-detail">Clients 4G+ >18 mois</div></div>
+                <span class="a-badge green">Prio</span>
+              </div>
+              <div class="a-pill">
+                <div class="a-icon pur">🛡</div>
+                <div><div class="a-name">Bundle Assurance</div><div class="a-detail">Ventes ≥400€ · ×2.1</div></div>
+                <span class="a-badge purple">×2.1</span>
+              </div>
+            </div>
+            <div class="fb-row">
+              <button class="fb-btn">👍 Utile</button>
+              <button class="fb-btn">👎 Non pertinent</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Alertes -->
+        <p class="sec-mini">Alertes</p>
+        @for (al of alerts; track al.title) {
+          <div class="al-item" [class]="al.severity">
+            <span class="al-dot"></span>
+            <div>
+              <div class="al-title">{{ al.title }}</div>
+              <div class="al-desc">{{ al.desc }}</div>
+              <div class="al-time">{{ al.time }}</div>
+            </div>
+          </div>
+        }
+      </div>
+    </div>
+
+    <!-- ══════════ CENTRE — KPIs + Tableau ══════════ -->
+    <div class="center-panel">
+
+      <p class="sec-label">Indicateurs clés · Temps réel</p>
+      <div class="kpi-row">
+        @for (card of kpiCards; track card.label) {
+          <div class="kpi-card" [class]="'c-' + card.color">
+            <div class="kc-lbl">{{ card.label }}</div>
+            <div class="kc-val">{{ card.value }}</div>
+            <div class="kc-sub">{{ card.sub }}</div>
+            <div class="kc-foot">
+              @if (card.progress !== undefined) {
+                <div class="kc-prog"><div class="kc-bar" [style.width.%]="card.progress"></div></div>
+                <span class="kc-pct">{{ card.progress }}%</span>
+              }
+              @if (card.trend) {
+                <span class="kc-trend" [class]="card.trend">{{ card.trend }}</span>
+              }
+            </div>
+          </div>
+        }
+      </div>
+
+      <p class="sec-label">Performance équipe</p>
+      <div class="team-card">
+        <div class="team-hdr">
+          <span class="team-title">Conseillers — Paris 15</span>
+          <span class="team-meta">4 actifs · Obj 8 000€</span>
+        </div>
+        <table>
+          <thead>
+            <tr>
+              <th>Conseiller</th><th>CA Réalisé</th>
+              <th>Performance</th><th>Prévision EOD</th><th>Coaching</th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (a of advisors; track a.initials) {
+              <tr>
+                <td>
+                  <div class="adv-cell">
+                    <div class="tc-av" [style.background]="a.avatar">{{ a.initials }}</div>
+                    <div>
+                      <div class="tc-name">{{ a.name }}</div>
+                      <div class="tc-spec">{{ a.specialty }}</div>
+                    </div>
+                  </div>
+                </td>
+                <td>
+                  <div class="mono">{{ a.sales | currency:'EUR':'symbol':'1.0-0':'fr' }}</div>
+                  <div class="mono-sub">/ {{ a.target | currency:'EUR':'symbol':'1.0-0':'fr' }}</div>
+                </td>
+                <td>
+                  <div class="pb-wrap">
+                    <div class="pb">
+                      <div class="pb-fill" [style.width.%]="perf(a.sales, a.target)"
+                           [style.background]="perfColor(perf(a.sales, a.target))"></div>
+                    </div>
+                    <span class="mono" [style.color]="perfColor(perf(a.sales, a.target))">
+                      {{ perf(a.sales, a.target) }}%
+                    </span>
+                  </div>
+                </td>
+                <td>
+                  <span class="mono" [style.color]="perfColor(perf(a.forecast, a.target))">
+                    {{ a.forecast | currency:'EUR':'symbol':'1.0-0':'fr' }}
+                  </span>
+                </td>
+                <td>
+                  <span class="st-pill" [class]="a.status">{{ statusLabel(a.status) }}</span>
+                </td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- ══════════ DROITE — Chat IA ══════════ -->
+    <div class="right-panel">
+
+      <div class="chat-hdr">
+        <div class="chat-hdr-row">
+          <div class="chat-ai-icon">🤖</div>
+          <div>
+            <div class="chat-ai-name">CoachAgent IA</div>
+            <div class="chat-ai-sub">Posez vos questions stratégie</div>
+          </div>
+          <span class="model-tag">Claude Sonnet</span>
+        </div>
+        <div class="ctx-chips">
+          <span class="ctx-chip">🌧 Pluie +40%</span>
+          <span class="ctx-chip">⏱ 3h28</span>
+          <span class="ctx-chip">📊 −46%</span>
+          <span class="ctx-chip">👥 12</span>
+        </div>
+      </div>
+
+      <div class="chat-msgs" #msgContainer>
+        @for (msg of chat.messages(); track msg.id) {
+          <div class="msg-wrap" [class.is-user]="msg.role === 'user'">
+            <div class="msg-av" [class]="msg.role === 'ai' ? 'ai-av' : 'usr-av'">
+              {{ msg.role === 'ai' ? '🤖' : 'KB' }}
+            </div>
+            <div class="msg-content">
+              <div class="msg-bubble" [class]="msg.role + '-bubble'">
+                <span [innerHTML]="msg.content | markdown"></span>
+              </div>
+              <div class="msg-meta">
+                <span class="msg-time">{{ msg.timestamp | date:'HH:mm' }}</span>
+                @if (msg.auditScore) {
+                  <span class="audit-badge">✓ Audit {{ msg.auditScore | number:'1.2-2' }}</span>
+                }
+                @if (msg.role === 'ai') {
+                  <button class="fb-mini" (click)="chat.setFeedback(msg.id, 'up')"
+                    [class.active]="msg.feedback === 'up'">👍</button>
+                  <button class="fb-mini" (click)="chat.setFeedback(msg.id, 'down')"
+                    [class.active]="msg.feedback === 'down'">👎</button>
+                }
+              </div>
+            </div>
+          </div>
+        }
+        @if (chat.isLoading()) {
+          <div class="msg-wrap">
+            <div class="msg-av ai-av">🤖</div>
+            <div class="typing-bubble">
+              <span class="t-dot"></span><span class="t-dot"></span><span class="t-dot"></span>
+            </div>
+          </div>
+        }
+      </div>
+
+      <div class="qq-sec">
+        <p class="qq-lbl">Suggestions rapides</p>
+        <div class="qq-scroll">
+          @for (q of quickQuestions; track q) {
+            <button class="qq-chip" (click)="useQuick(q)">{{ q }}</button>
+          }
+        </div>
+      </div>
+
+      <div class="input-sec">
+        <div class="input-wrap">
+          <textarea class="chat-ta" rows="1"
+            placeholder="Posez votre question… (↵ Envoyer)"
+            [(ngModel)]="chatInput"
+            (keydown.enter)="onEnter($event)">
+          </textarea>
+          <button class="send-btn" (click)="sendMessage()">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none"
+                 stroke="white" stroke-width="2.5" stroke-linecap="round">
+              <line x1="22" y1="2" x2="11" y2="13"/>
+              <polygon points="22 2 15 22 11 13 2 9 22 2"/>
+            </svg>
+          </button>
+        </div>
+        <div class="input-footer">
+          <span class="input-hint">↵ Envoyer · Shift+↵ Nouvelle ligne</span>
+          <div class="ctx-tags">
+            <span class="ctx-tag">Paris 15</span>
+            <span class="ctx-tag">Karim B.</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
