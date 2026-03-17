@@ -32,18 +32,18 @@ export class AdvisorComponent implements OnInit, OnDestroy, AfterViewChecked {
   readonly advisors = this.mock.getAdvisors();
 
   readonly kpiCards = [
-    { label: "Mon CA Aujourd'hui", value:'1 850€', sub:'Objectif 2 000€',     color:'red'    as const, progress:93 },
+    { label: "Mon CA Aujourd'hui", value:'1 850DT', sub:'Objectif 2 000DT',     color:'red'    as const, progress:93 },
     // { label: 'Score Coaching IA',  value:'0.91',   sub:'3 conseils appliqués', color:'green'  as const, trend:{ label:'↑ Top équipe', type:'up' as const } },
     { label: 'Clients servis',     value:'7',      sub:'Moy. boutique : 5.2',  color:'purple' as const, trend:{ label:'↑ +35%',       type:'up' as const } },
   ];
 
   readonly products = [
-    { icon:'📱', name:'iPhone 16 Pro',    cat:'Smartphone', price:'1 299€', margin:'Élevée', hot:true  },
-    { icon:'📶', name:'Fibre 2Gb Pro',    cat:'Internet',   price:'49€/m',  margin:'Moyenne',hot:true  },
-    { icon:'🛡', name:'Assurance Premium',cat:'Service',    price:'9€/m',   margin:'Élevée', hot:false },
-    { icon:'⌚', name:'Apple Watch S10',  cat:'Accessoire', price:'449€',   margin:'Élevée', hot:true  },
-    { icon:'🎧', name:'AirPods Pro 3',    cat:'Accessoire', price:'279€',   margin:'Élevée', hot:false },
-    { icon:'💼', name:'Pack Pro Business',cat:'Bundle',     price:'89€/m',  margin:'Haute',  hot:true  },
+    { icon:'📱', name:'iPhone 16 Pro',    cat:'Smartphone', price:'1 299DT', margin:'Élevée', hot:true  },
+    { icon:'📶', name:'Fibre 2Gb Pro',    cat:'Internet',   price:'49DT/m',  margin:'Moyenne',hot:true  },
+    { icon:'🛡', name:'Assurance Premium',cat:'Service',    price:'9DT/m',   margin:'Élevée', hot:false },
+    { icon:'⌚', name:'Apple Watch S10',  cat:'Accessoire', price:'449DT',   margin:'Élevée', hot:true  },
+    { icon:'🎧', name:'AirPods Pro 3',    cat:'Accessoire', price:'279DT',   margin:'Élevée', hot:false },
+    { icon:'💼', name:'Pack Pro Business',cat:'Bundle',     price:'89DT/m',  margin:'Haute',  hot:true  },
   ];
 
   readonly quickQuestions = [
@@ -52,7 +52,7 @@ export class AdvisorComponent implements OnInit, OnDestroy, AfterViewChecked {
     'Comment gérer objection prix ?',
     'Stratégie pic trafic 16h30 ?',
     'Upsell accessoires pluie ?',
-    'Franchir palier 2 000€ ?',
+    'Franchir palier 2 000DT ?',
   ];
 
   chatInput = '';
@@ -62,7 +62,7 @@ export class AdvisorComponent implements OnInit, OnDestroy, AfterViewChecked {
   private readonly pushEvents: Omit<import('../../core/models/models').Notification, 'id' | 'read'>[] = [
     { type:'traffic',  title:'Trafic en hausse',      message:'+3 visiteurs · Opportunité accessoires',   severity:'amber', time:'' },
     { type:'coach',    title:'Nouveau conseil IA',     message:'Bundle assurance recommandé · Score 0.89', severity:'blue',  time:'' },
-    { type:'forecast', title:'Prévision mise à jour',  message:'EOD estimé 6 950€ · Tendance haussière',  severity:'green', time:'' },
+    { type:'forecast', title:'Prévision mise à jour',  message:'EOD estimé 6 950DT · Tendance haussière',  severity:'green', time:'' },
     { type:'alert',    title:'Alerte objectif équipe', message:'Amine T. à 37% · Intervention requise',   severity:'red',   time:'' },
   ];
 

@@ -3,135 +3,300 @@
   <!-- ── SUBHEADER ─────────────────────────────────────────────── -->
   <div class="subhdr">
     <div class="sub-left">
-      <span class="breadcrumb">Boutiques › <strong>Lac 2 </strong> › <strong>Lac 2 </strong></span>
-      <span class="store-badge">🏪 Lac 2  · Lac 2 </span>
+      <span class="breadcrumb">
+        Boutiques › <strong>Tunis</strong> › <strong>lac 2</strong>
+      </span>
+      <span class="store-badge">🏪Tunis</span>
       <span class="sys-badge"><i class="sys-dot"></i> Système nominal</span>
     </div>
-    
   </div>
 
-  <!-- ── GRID 3 COLONNES ────────────────────────────────────────── -->
+  <!-- ── GRID 3 COLONNES ───────────────────────────────────────── -->
   <div class="main-grid">
 
-    <!-- ══════════ GAUCHE — Conseiller ══════════ -->
+    <!-- ════════ GAUCHE ════════ -->
     <div class="left-panel">
 
-      <!-- <div class="panel-hdr">
+      <!-- Profil conseiller -->
+      <div class="panel-hdr">
         <p class="panel-tag">Interface conseiller · Vue mobile</p>
         <div class="adv-row">
-          <div class="adv-av" style="background:linear-gradient(135deg,#2563eb,#7c3aed)">KB</div>
+          <div class="adv-av"
+               style="background:linear-gradient(135deg,#2563eb,#7c3aed)">KB</div>
           <div>
             <div class="adv-name">Karim Benali</div>
             <div class="adv-role">Conseiller Senior · 5G</div>
           </div>
           <span class="green-badge">+0.91</span>
         </div>
-      </div> -->
+      </div>
 
+      <!-- KPI mini strip -->
+      <div class="kpi-strip">
+        <div class="km">
+          <div class="km-v blue">4 250DT</div>
+          <div class="km-l">Ventes</div>
+        </div>
+        <div class="km">
+          <div class="km-v">8 000DT</div>
+          <div class="km-l">Objectif</div>
+        </div>
+        <div class="km">
+          <div class="km-v red">−46%</div>
+          <div class="km-l">Gap EOD</div>
+        </div>
+        <div class="km">
+          <div class="km-v">12</div>
+          <div class="km-l">Visiteurs</div>
+        </div>
+      </div>
+
+      <!-- Progress bar -->
       <div class="prog-sec">
         <div class="prog-row">
           <span class="prog-lbl">Objectif journalier</span>
           <span class="prog-pct">53% · 3h28</span>
         </div>
-        <div class="prog-track"><div class="prog-fill" style="width:53%"></div></div>
-      </div>
-      <div class="kpi-strip">
-        <div class="km"><div class="km-v" style="color:var(--blue-700)">4 250€</div><div class="km-l">Ventes</div></div>
-        <div class="km"><div class="km-v">8 000€</div><div class="km-l">Objectif</div></div>
-        <div class="km"><div class="km-v" style="color:var(--red-600)">−46%</div><div class="km-l">Gap EOD</div></div>
-        <div class="km"><div class="km-v">12</div><div class="km-l">Visiteurs</div></div>
+        <div class="prog-track">
+          <div class="prog-fill" style="width:53%"></div>
+        </div>
       </div>
 
-
-      <div class="scroll-area">
-
-        <!-- Coaching Card -->
-        <div class="coach-card">
-          <div class="cc-hdr">
-            <div class="cc-icon">🤖</div>
-            <div>
-              <div class="cc-title">Conseil IA · CoachAgent</div>
-              <div class="cc-sub">Il y a 2 min · Mistral-7B · Audit ✓</div>
-            </div>
-            <span class="cc-score">0.84</span>
+      <!-- Coaching card -->
+      <div class="coach-card">
+        <div class="cc-hdr">
+          <div class="cc-icon">🤖</div>
+          <div>
+            <div class="cc-title">Conseil IA · CoachAgent</div>
           </div>
-          <div class="cc-body">
-            <div class="ctx-box">🌧 Pluie + trafic élevé → accessoires +40%</div>
-            <p class="cc-text">La boutique affiche <strong>12 visiteurs actifs</strong>.
-              Prévision EOD <strong>6 800€</strong> — effort ciblé requis.</p>
-            <div class="action-pills">
-              <div class="a-pill">
-                <div class="a-icon amb">📱</div>
-                <div><div class="a-name">Upsell Accessoires</div><div class="a-detail">Protection · +65€ panier</div></div>
-                <span class="a-badge blue">+40%</span>
+          <span class="cc-score">0.84</span>
+        </div>
+        <div class="cc-body">
+          <div class="ctx-box">🌧 Pluie + trafic élevé → accessoires +40%</div>
+          <p class="cc-text">
+            La boutique affiche <strong>12 visiteurs actifs</strong>.
+            Prévision EOD <strong>6 800DT</strong> — effort ciblé requis.
+          </p>
+          <div class="action-pills">
+            <div class="a-pill"
+                 (click)="useQuick('Script upsell accessoires en cas de pluie ?')">
+              <div class="a-icon amb">📱</div>
+              <div>
+                <div class="a-name">Upsell Accessoires</div>
+                <div class="a-detail">Protection · +65DT panier</div>
               </div>
-              <div class="a-pill">
-                <div class="a-icon grn">📶</div>
-                <div><div class="a-name">Upgrade 5G Premium</div><div class="a-detail">Clients 4G+ >18 mois</div></div>
-                <span class="a-badge green">Prio</span>
-              </div>
-              <div class="a-pill">
-                <div class="a-icon pur">🛡</div>
-                <div><div class="a-name">Bundle Assurance</div><div class="a-detail">Ventes ≥400€ · ×2.1</div></div>
-                <span class="a-badge purple">×2.1</span>
-              </div>
+              <span class="a-badge blue">+40%</span>
             </div>
-            <div class="fb-row">
-              <button class="fb-btn">👍 Utile</button>
-              <button class="fb-btn">👎 Non pertinent</button>
+            <div class="a-pill"
+                 (click)="useQuick('Argument upgrade 5G Premium pour client 4G ?')">
+              <div class="a-icon grn">📶</div>
+              <div>
+                <div class="a-name">Upgrade 5G Premium</div>
+                <div class="a-detail">Clients 4G+ >18 mois</div>
+              </div>
+              <span class="a-badge green">Prio</span>
             </div>
+            <div class="a-pill"
+                 (click)="useQuick('Script bundle assurance sur ventes élevées ?')">
+              <div class="a-icon pur">🛡</div>
+              <div>
+                <div class="a-name">Bundle Assurance</div>
+                <div class="a-detail">Ventes ≥400DT · ×2.1</div>
+              </div>
+              <span class="a-badge purple">×2.1</span>
+            </div>
+          </div>
+          <div class="fb-row">
+            <button class="fb-btn">👍 Utile</button>
+            <button class="fb-btn">👎 Non pertinent</button>
           </div>
         </div>
-
-        <!-- Alertes -->
-        <p class="sec-mini">Alertes</p>
-        @for (al of alerts; track al.title) {
-          <div class="al-item" [class]="al.severity">
-            <span class="al-dot"></span>
-            <div>
-              <div class="al-title">{{ al.title }}</div>
-              <div class="al-desc">{{ al.desc }}</div>
-              <div class="al-time">{{ al.time }}</div>
-            </div>
-          </div>
-        }
       </div>
+
+      <!-- Alertes -->
+      <p class="sec-mini">Alertes</p>
+      @for (al of alerts; track al.title) {
+        <div class="al-item" [class]="al.severity">
+          <span class="al-dot"></span>
+          <div>
+            <div class="al-title">{{ al.title }}</div>
+            <div class="al-desc">{{ al.desc }}</div>
+            <div class="al-time">{{ al.time }}</div>
+          </div>
+        </div>
+      }
+
     </div>
 
-    <!-- ══════════ CENTRE — KPIs + Tableau ══════════ -->
+    <!-- ════════ CENTRE ════════ -->
     <div class="center-panel">
 
+      <!-- KPI Cards -->
       <p class="sec-label">Indicateurs clés · Temps réel</p>
       <div class="kpi-row">
         @for (card of kpiCards; track card.label) {
-          <div class="kpi-card" [class]="'c-' + card.color">
-            <div class="kc-lbl">{{ card.label }}</div>
-            <div class="kc-val">{{ card.value }}</div>
-            <div class="kc-sub">{{ card.sub }}</div>
-            <div class="kc-foot">
-              @if (card.progress !== undefined) {
-                <div class="kc-prog"><div class="kc-bar" [style.width.%]="card.progress"></div></div>
-                <span class="kc-pct">{{ card.progress }}%</span>
-              }
-              @if (card.trend) {
-                <span class="kc-trend" [class]="card.trend">{{ card.trend }}</span>
-              }
-            </div>
-          </div>
+          <app-kpi-card [card]="card" />
         }
       </div>
 
+      <!-- ── GRAPHE TIME SERIES ── -->
+      <div class="chart-card">
+
+        <div class="chart-hdr">
+          <div>
+            <div class="chart-title">📈 Évolution CA · Objectif vs Réalisé</div>
+            <div class="chart-sub">
+              Oct–Déc 2024 · {{ chartData.length }} points
+            </div>
+          </div>
+          <div class="chart-controls">
+            <button class="period-btn"
+              [class.active]="chartPeriod==='7d'"
+              (click)="chartPeriod='7d'">7J</button>
+            <button class="period-btn"
+              [class.active]="chartPeriod==='30d'"
+              (click)="chartPeriod='30d'">30J</button>
+            <button class="period-btn"
+              [class.active]="chartPeriod==='90d'"
+              (click)="chartPeriod='90d'">90J</button>
+          </div>
+        </div>
+
+        <!-- SVG chart -->
+        <div class="chart-body">
+          <svg viewBox="0 0 620 148" class="ts-svg" preserveAspectRatio="none">
+            <defs>
+              <linearGradient id="gObj" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stop-color="#0050D8" stop-opacity=".12"/>
+                <stop offset="100%" stop-color="#0050D8" stop-opacity="0"/>
+              </linearGradient>
+              <linearGradient id="gReal" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stop-color="#059669" stop-opacity=".2"/>
+                <stop offset="100%" stop-color="#059669" stop-opacity="0"/>
+              </linearGradient>
+            </defs>
+
+            <!-- Grilles -->
+            @for (yv of [10, 35, 60, 85]; track yv) {
+              <line x1="30" [attr.y1]="yv" x2="608" [attr.y2]="yv"
+                    stroke="#E2E8F0" stroke-width="0.7"/>
+            }
+
+            <!-- Labels axe Y -->
+            <text x="26" y="13"  text-anchor="end" font-size="7"
+                  fill="#94A3B8" font-family="monospace">
+              {{ fmtK(maxVal) }}
+            </text>
+            <text x="26" y="63"  text-anchor="end" font-size="7"
+                  fill="#94A3B8" font-family="monospace">
+              {{ fmtKFloor(maxVal / 2) }}
+            </text>
+            <text x="26" y="88"  text-anchor="end" font-size="7"
+                  fill="#94A3B8" font-family="monospace">
+              0
+            </text>
+
+            <!-- Area objectif -->
+            <path [attr.d]="buildArea(chartData.map(d=>d.objectif), 578, 90)"
+                  transform="translate(30,5)"
+                  fill="url(#gObj)"/>
+
+            <!-- Area réalisé -->
+            <path [attr.d]="buildArea(chartData.map(d=>d.realise), 578, 90)"
+                  transform="translate(30,5)"
+                  fill="url(#gReal)"/>
+
+            <!-- Ligne objectif tirets -->
+            <path [attr.d]="buildPath(chartData.map(d=>d.objectif), 578, 90)"
+                  transform="translate(30,5)"
+                  fill="none" stroke="#0050D8" stroke-width="1.5"
+                  stroke-dasharray="5,3" opacity=".6"/>
+
+            <!-- Ligne réalisé pleine -->
+            <path [attr.d]="buildPath(chartData.map(d=>d.realise), 578, 90)"
+                  transform="translate(30,5)"
+                  fill="none" stroke="#059669" stroke-width="2.5"/>
+
+            <!-- Points + labels -->
+            @for (pt of chartData; track pt.label; let i = $index) {
+              <g transform="translate(30,5)">
+                <circle
+                  [attr.cx]="svgX(i, chartData.length, 578)"
+                  [attr.cy]="svgY(pt.realise, 90)"
+                  r="3"
+                  [attr.fill]="pt.realise >= pt.objectif ? '#059669' : '#DC2626'"
+                  stroke="white" stroke-width="1"/>
+                @if (labelEvery(i)) {
+                  <text
+                    [attr.x]="svgX(i, chartData.length, 578)"
+                    y="106"
+                    text-anchor="middle" font-size="6.5"
+                    fill="#94A3B8" font-family="monospace">
+                    {{ pt.label }}
+                  </text>
+                  <text
+                    [attr.x]="svgX(i, chartData.length, 578)"
+                    y="120"
+                    text-anchor="middle" font-size="9">
+                    {{ meteoIcon(pt.meteo) }}
+                  </text>
+                }
+              </g>
+            }
+          </svg>
+        </div>
+
+        <!-- Footer graphe -->
+        <div class="chart-footer">
+          <div class="chart-legend">
+            <span class="leg-item">
+              <span class="leg-dash"></span>Objectif
+            </span>
+            <span class="leg-item">
+              <span class="leg-solid"></span>CA Réalisé
+            </span>
+            <span class="leg-item">
+              <span class="leg-dot grn"></span>≥ Objectif
+            </span>
+            <span class="leg-item">
+              <span class="leg-dot red"></span>&lt; Objectif
+            </span>
+          </div>
+          <div class="chart-stats">
+            <span class="cs-item">
+              <span class="cs-val grn">{{ daysAbove }}</span>
+              <span class="cs-lbl">jours ≥ obj</span>
+            </span>
+            <span class="cs-sep"></span>
+            <span class="cs-item">
+              <span class="cs-val red">{{ daysBelow }}</span>
+              <span class="cs-lbl">jours &lt; obj</span>
+            </span>
+            <span class="cs-sep"></span>
+            <span class="cs-item">
+              <span class="cs-val blu">{{ fmtK(avgDaily) }}</span>
+              <span class="cs-lbl">moy/jour</span>
+            </span>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Tableau équipe -->
       <p class="sec-label">Performance équipe</p>
       <div class="team-card">
         <div class="team-hdr">
-          <span class="team-title">Conseillers — Lac 2 </span>
-          <span class="team-meta">4 actifs · Obj 8 000€</span>
+          <span class="team-title">Conseillers — Lac 2</span>
+          <span class="team-meta">4 actifs · Obj 8 000DT</span>
         </div>
         <table>
           <thead>
             <tr>
-              <th>Conseiller</th><th>CA Réalisé</th>
-              <th>Performance</th><th>Prévision EOD</th><th>Coaching</th>
+              <th>Conseiller</th>
+              <th>CA Réalisé</th>
+              <th>Performance</th>
+              <th>Prévision EOD</th>
+              <th>Coaching</th>
             </tr>
           </thead>
           <tbody>
@@ -139,7 +304,9 @@
               <tr>
                 <td>
                   <div class="adv-cell">
-                    <div class="tc-av" [style.background]="a.avatar">{{ a.initials }}</div>
+                    <div class="tc-av" [style.background]="a.avatar">
+                      {{ a.initials }}
+                    </div>
                     <div>
                       <div class="tc-name">{{ a.name }}</div>
                       <div class="tc-spec">{{ a.specialty }}</div>
@@ -147,36 +314,47 @@
                   </div>
                 </td>
                 <td>
-                  <div class="mono">{{ a.sales | currency:'EUR':'symbol':'1.0-0':'fr' }}</div>
-                  <div class="mono-sub">/ {{ a.target | currency:'EUR':'symbol':'1.0-0':'fr' }}</div>
+                  <div class="mono">
+                    {{ a.sales | currency:'EUR':'symbol':'1.0-0':'fr' }}
+                  </div>
+                  <div class="mono-sub">
+                    / {{ a.target | currency:'EUR':'symbol':'1.0-0':'fr' }}
+                  </div>
                 </td>
                 <td>
                   <div class="pb-wrap">
                     <div class="pb">
-                      <div class="pb-fill" [style.width.%]="perf(a.sales, a.target)"
-                           [style.background]="perfColor(perf(a.sales, a.target))"></div>
+                      <div class="pb-fill"
+                           [style.width.%]="perf(a.sales, a.target)"
+                           [style.background]="perfColor(perf(a.sales, a.target))">
+                      </div>
                     </div>
-                    <span class="mono" [style.color]="perfColor(perf(a.sales, a.target))">
+                    <span class="mono"
+                          [style.color]="perfColor(perf(a.sales, a.target))">
                       {{ perf(a.sales, a.target) }}%
                     </span>
                   </div>
                 </td>
                 <td>
-                  <span class="mono" [style.color]="perfColor(perf(a.forecast, a.target))">
+                  <span class="mono"
+                        [style.color]="perfColor(perf(a.forecast, a.target))">
                     {{ a.forecast | currency:'EUR':'symbol':'1.0-0':'fr' }}
                   </span>
                 </td>
                 <td>
-                  <span class="st-pill" [class]="a.status">{{ statusLabel(a.status) }}</span>
+                  <span class="st-pill" [class]="a.status">
+                    {{ statusLabel(a.status) }}
+                  </span>
                 </td>
               </tr>
             }
           </tbody>
         </table>
       </div>
+
     </div>
 
-    <!-- ══════════ DROITE — Chat IA ══════════ -->
+    <!-- ════════ DROITE — Chat ════════ -->
     <div class="right-panel">
 
       <div class="chat-hdr">
@@ -199,7 +377,8 @@
       <div class="chat-msgs" #msgContainer>
         @for (msg of chat.messages(); track msg.id) {
           <div class="msg-wrap" [class.is-user]="msg.role === 'user'">
-            <div class="msg-av" [class]="msg.role === 'ai' ? 'ai-av' : 'usr-av'">
+            <div class="msg-av"
+                 [class]="msg.role === 'ai' ? 'ai-av' : 'usr-av'">
               {{ msg.role === 'ai' ? '🤖' : 'KB' }}
             </div>
             <div class="msg-content">
@@ -207,26 +386,42 @@
                 <span [innerHTML]="msg.content | markdown"></span>
               </div>
               <div class="msg-meta">
-                <span class="msg-time">{{ msg.timestamp | date:'HH:mm' }}</span>
+                <span class="msg-time">
+                  {{ msg.timestamp | date:'HH:mm' }}
+                </span>
                 @if (msg.auditScore) {
-                  <span class="audit-badge">✓ Audit {{ msg.auditScore | number:'1.2-2' }}</span>
+                  <span class="audit-badge">
+                    ✓ Audit {{ msg.auditScore | number:'1.2-2' }}
+                  </span>
                 }
                 @if (msg.role === 'ai') {
-                  <button class="fb-mini" (click)="chat.setFeedback(msg.id, 'up')"
+                  <button class="fb-mini"
+                    (click)="chat.setFeedback(msg.id, 'up')"
                     [class.active]="msg.feedback === 'up'">👍</button>
-                  <button class="fb-mini" (click)="chat.setFeedback(msg.id, 'down')"
+                  <button class="fb-mini"
+                    (click)="chat.setFeedback(msg.id, 'down')"
                     [class.active]="msg.feedback === 'down'">👎</button>
                 }
               </div>
             </div>
           </div>
         }
+
         @if (chat.isLoading()) {
           <div class="msg-wrap">
             <div class="msg-av ai-av">🤖</div>
             <div class="typing-bubble">
-              <span class="t-dot"></span><span class="t-dot"></span><span class="t-dot"></span>
+              <span class="t-dot"></span>
+              <span class="t-dot"></span>
+              <span class="t-dot"></span>
             </div>
+          </div>
+        }
+
+        @if (chat.hasError()) {
+          <div class="error-banner">
+            ⚠️ {{ chat.error() }}
+            <button (click)="chat.clear()">Réessayer</button>
           </div>
         }
       </div>
@@ -247,7 +442,9 @@
             [(ngModel)]="chatInput"
             (keydown.enter)="onEnter($event)">
           </textarea>
-          <button class="send-btn" (click)="sendMessage()">
+          <button class="send-btn"
+                  [disabled]="chat.isLoading()"
+                  (click)="sendMessage()">
             <svg width="13" height="13" viewBox="0 0 24 24" fill="none"
                  stroke="white" stroke-width="2.5" stroke-linecap="round">
               <line x1="22" y1="2" x2="11" y2="13"/>
@@ -258,11 +455,12 @@
         <div class="input-footer">
           <span class="input-hint">↵ Envoyer · Shift+↵ Nouvelle ligne</span>
           <div class="ctx-tags">
-            <span class="ctx-tag">Lac 2 </span>
+            <span class="ctx-tag">Paris 15</span>
             <span class="ctx-tag">Karim B.</span>
           </div>
         </div>
       </div>
+
     </div>
 
   </div>
