@@ -14,7 +14,7 @@ import { ThemeService } from './core/services/theme';
       <main class="app-main">
         <router-outlet />
       </main>
-      <app-footer />
+      
     </div>
   `,
   styles: [`

@@ -33,7 +33,7 @@ export class AdvisorComponent implements OnInit, OnDestroy, AfterViewChecked {
 
   readonly kpiCards = [
     { label: "Mon CA Aujourd'hui", value:'1 850€', sub:'Objectif 2 000€',     color:'red'    as const, progress:93 },
-    { label: 'Score Coaching IA',  value:'0.91',   sub:'3 conseils appliqués', color:'green'  as const, trend:{ label:'↑ Top équipe', type:'up' as const } },
+    // { label: 'Score Coaching IA',  value:'0.91',   sub:'3 conseils appliqués', color:'green'  as const, trend:{ label:'↑ Top équipe', type:'up' as const } },
     { label: 'Clients servis',     value:'7',      sub:'Moy. boutique : 5.2',  color:'purple' as const, trend:{ label:'↑ +35%',       type:'up' as const } },
   ];
 
