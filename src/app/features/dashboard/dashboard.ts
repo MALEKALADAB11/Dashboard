@@ -6,23 +6,13 @@ import { CommonModule, CurrencyPipe, DecimalPipe, DatePipe } from '@angular/comm
 import { FormsModule } from '@angular/forms';
 
 import { KpiCardComponent } from '../../shared/components/kpi-card/kpi-card';
-
-import { KpiCard } from '../../core/models/models';
-import { ChatStateService } from '../../core/services/chat-state';
 import { MarkdownPipe } from '../../shared/pipes/markdown-pipe';
+
+import { ChatStateService } from '../../core/services/chat-state';
+import { TelecomSalesDataService } from '../../core/services/telecom-sales-data.service';
 
 interface TsPoint {
   label: string; objectif: number; realise: number; meteo: string;
-}
-
-interface Advisor {
-  initials: string; name: string; specialty: string;
-  avatar: string; sales: number; target: number;
-  forecast: number; status: string;
-}
-
-interface AlertItem {
-  title: string; desc: string; time: string; severity: string;
 }
 
 const TS: TsPoint[] = [
@@ -63,38 +53,35 @@ const TS: TsPoint[] = [
     DecimalPipe, DatePipe, KpiCardComponent, MarkdownPipe
   ],
   templateUrl: './dashboard.html',
-  styleUrl:    './dashboard.scss',
+  styleUrl: './dashboard.scss',
 })
 export class DashboardComponent implements AfterViewChecked {
-
   public readonly chat = inject(ChatStateService);
+  private readonly data = inject(TelecomSalesDataService);
+
   private readonly msgRef = viewChild<ElementRef>('msgContainer');
 
-  chatInput   = '';
+  chatInput = '';
   chartPeriod = '30d';
 
-  readonly kpiCards: KpiCard[] = [
-    { label:'CA Journalier',   value:'4250DT', sub:'Objectif 8 000DT · 3h28',     color:'blue',   progress:53 },
-    { label:'Prévision EOD',   value:'6800DT', sub:'IC 80% [5 400–8 200DT]',       color:'amber',  trend:{ label:'⟳ α=0.52',        type:'neutral' } },
-    { label:'Score Coaching',  value:'0.81',   sub:'AuditAgent · 4 conseils',      color:'green',  trend:{ label:'↑ +0.07 vs hier',  type:'up'      } },
-    { label:'Trafic Boutique', value:'12',     sub:'Capacité 20 · 60%',           color:'purple', progress:60 },
-  ];
+  // Signals
+  readonly kpiCards = this.data.kpiCards;
+  readonly advisors = this.data.advisors;
+  readonly alerts = this.data.alerts;
 
-  readonly advisors: Advisor[] = [
-    { initials:'KB', name:'Karim Benali', specialty:'Smartphones · 5G',  avatar:'#2563EB', sales:1850, target:2000, forecast:2050, status:'sent'    },
-    { initials:'SM', name:'Sara Moulai',  specialty:'Fibre · Offres Pro', avatar:'#059669', sales:1200, target:2000, forecast:1750, status:'urgent'  },
-    { initials:'AT', name:'Amine Tazi',   specialty:'Accessoires',        avatar:'#DC2626', sales:750,  target:2000, forecast:1100, status:'urgent'  },
-    { initials:'LK', name:'Leila Khadri', specialty:'Rétention · CRM',   avatar:'#7C3AED', sales:450,  target:2000, forecast:720,  status:'waiting' },
-  ];
-
-  readonly alerts: AlertItem[] = [
-    { title:'Sara M. — Objectif critique 60%', desc:'Prévision EOD 1 750DT · Coach généré', time:'14:30',    severity:'red'   },
-    { title:'Pic trafic prévu 16h30',           desc:'+8 visiteurs · Fenêtre 45 min',        time:'Dans 1h58', severity:'amber' },
-  ];
+  readonly leftStrip = this.data.leftStrip;
+  readonly dataStats = this.data.dataStats;
+  readonly topProducts = this.data.topProducts;
+  readonly insights = this.data.insights;
 
   readonly quickQuestions = [
     'Argument 5G ?', 'Gérer client SFR ?', 'Pic 16h30 ?', 'Script assurance ?'
   ];
+
+  constructor() {
+    this.data.loadOnce();
+    effect(() => { this.chat.messages(); this.scrollBottom(); });
+  }
 
   // ── Time Series ───────────────────────────────────────────────
   get chartData(): TsPoint[] {
@@ -123,22 +110,28 @@ export class DashboardComponent implements AfterViewChecked {
 
   buildArea(values: number[], w = 560, h = 95): string {
     if (!values.length) return '';
-    const top    = values.map((v, i) =>
+    const top = values.map((v, i) =>
       `${this.svgX(i, values.length, w)},${this.svgY(v, h)}`
     ).join(' L');
-    const n      = values.length;
-    const bottom = `${this.svgX(n-1, n, w)},${h} ${this.svgX(0, n, w)},${h}`;
+    const n = values.length;
+    const bottom = `${this.svgX(n - 1, n, w)},${h} ${this.svgX(0, n, w)},${h}`;
     return `M${top} L${bottom} Z`;
   }
 
   meteoIcon(m: string): string {
-    return ({ Ensoleillé:'☀️', Nuageux:'⛅', Venteux:'🌬️',
-              Doux:'🌤️', Pluvieux:'🌧️', Frais:'🌥️' } as any)[m] ?? '🌡️';
+    return ({
+      Ensoleillé: '☀️',
+      Nuageux: '⛅',
+      Venteux: '🌬️',
+      Doux: '🌤️',
+      Pluvieux: '🌧️',
+      Frais: '🌥️'
+    } as any)[m] ?? '🌡️';
   }
 
   fmtK(v: number): string {
     if (v >= 1_000_000) return (v / 1_000_000).toFixed(1) + 'M';
-    if (v >= 1_000)     return Math.round(v / 1_000) + 'k';
+    if (v >= 1_000) return Math.round(v / 1_000) + 'k';
     return String(Math.round(v));
   }
 
@@ -152,8 +145,8 @@ export class DashboardComponent implements AfterViewChecked {
   }
 
   get daysAbove(): number { return this.chartData.filter(d => d.realise >= d.objectif).length; }
-  get daysBelow(): number { return this.chartData.filter(d => d.realise  < d.objectif).length; }
-  get avgDaily():  number {
+  get daysBelow(): number { return this.chartData.filter(d => d.realise < d.objectif).length; }
+  get avgDaily(): number {
     const s = this.chartData;
     return s.length ? Math.round(s.reduce((a, d) => a + d.realise, 0) / s.length) : 0;
   }
@@ -161,19 +154,12 @@ export class DashboardComponent implements AfterViewChecked {
   // ── Tableau ───────────────────────────────────────────────────
   perf(s: number, t: number): number { return Math.round(s / t * 100); }
 
-  perfColor(p: number): string {
-    return p >= 80 ? 'var(--green)' : p >= 50 ? 'var(--amber)' : 'var(--red-600)';
-  }
-
+ 
   statusLabel(s: string): string {
-    return ({ sent:'⏱ Envoyé', urgent:'🔴 Urgent', waiting:'⏳ Attente' } as any)[s] ?? s;
+    return ({ sent: '⏱ Envoyé', urgent: '🔴 Urgent', waiting: '⏳ Attente' } as any)[s] ?? s;
   }
 
   // ── Chat ──────────────────────────────────────────────────────
-  constructor() {
-    effect(() => { this.chat.messages(); this.scrollBottom(); });
-  }
-
   ngAfterViewChecked(): void { this.scrollBottom(); }
 
   private scrollBottom(): void {
@@ -187,6 +173,7 @@ export class DashboardComponent implements AfterViewChecked {
     this.chatInput = '';
     this.chat.addUserMessage(text);
     this.chat.isLoading.set(true);
+
     setTimeout(() => {
       this.chat.addAiMessage(
         `Analyse pour **"${text}"** :\n\n` +
@@ -205,4 +192,12 @@ export class DashboardComponent implements AfterViewChecked {
   }
 
   useQuick(q: string): void { this.chatInput = q; this.sendMessage(); }
+  perfPct(a: { perfPct?: number } | null | undefined): number {
+  return Math.max(0, Math.min(100, Math.round(a?.perfPct ?? 0)));
+}
+
+  perfColor(p: number): string {
+    // seuils percentile
+    return p >= 75 ? 'var(--green)' : p >= 40 ? 'var(--amber)' : 'var(--red-600)';
+  }
 }

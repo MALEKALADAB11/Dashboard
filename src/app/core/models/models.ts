@@ -8,6 +8,7 @@ export interface Advisor {
   forecast:   number;
   coachScore: number;
   status:     'sent' | 'urgent' | 'waiting';
+  perfPct?: number;
 }
 
 export interface KpiCard {
@@ -43,4 +44,5 @@ export interface Notification {
   time:     string;
   read:     boolean;
   severity: 'red' | 'amber' | 'green' | 'blue';
+
 }

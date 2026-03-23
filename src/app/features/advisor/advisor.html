@@ -101,7 +101,7 @@
             </tr>
           </thead>
           <tbody>
-            @for (a of advisors; track a.initials; let i = $index) {
+            @for (a of advisors(); track a.initials; let i = $index)  {
               <tr [class.me]="a.initials === 'KB'">
                 <td><span class="rank-badge" [style.background]="rankColor(i)">{{ i+1 }}</span></td>
                 <td>
@@ -117,8 +117,8 @@
                   </div>
                 </td>
                 <td>
-                  <div class="mono">{{ a.sales | currency:'EUR':'symbol':'1.0-0':'fr' }}</div>
-                  <div class="mono-sub">/ {{ a.target | currency:'EUR':'symbol':'1.0-0':'fr' }}</div>
+                  <div class="mono">{{ a.sales | currency:'DT':'symbol':'1.0-0':'fr' }}</div>
+                  <div class="mono-sub">/ {{ a.target | currency:'DT':'symbol':'1.0-0':'fr' }}</div>
                 </td>
                 <td>
                   <div class="pb-wrap">
@@ -134,7 +134,7 @@
                 </td>
                 <td>
                   <span class="mono" [style.color]="perfColor(perf(a.forecast,a.target))">
-                    {{ a.forecast | currency:'EUR':'symbol':'1.0-0':'fr' }}
+                    {{ a.forecast | currency:'DT':'symbol':'1.0-0':'fr' }}
                   </span>
                 </td>
                 <td>

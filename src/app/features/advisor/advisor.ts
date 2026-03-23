@@ -4,12 +4,13 @@ import {
 } from '@angular/core';
 import { CommonModule, CurrencyPipe, DecimalPipe, DatePipe } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+
 import { ChatStateService } from '../../core/services/chat-state';
-import { MockDataService } from '../../core/services/mock-data';
 import { ThemeService } from '../../core/services/theme';
+import { TelecomSalesDataService } from '../../core/services/telecom-sales-data.service';
+
 import { KpiCardComponent } from '../../shared/components/kpi-card/kpi-card';
 import { MarkdownPipe } from '../../shared/pipes/markdown-pipe';
-
 
 @Component({
   selector: 'app-advisor',
@@ -22,19 +23,18 @@ import { MarkdownPipe } from '../../shared/pipes/markdown-pipe';
   styleUrl:    './advisor.scss',
 })
 export class AdvisorComponent implements OnInit, OnDestroy, AfterViewChecked {
-  private readonly mock  = inject(MockDataService);
+  private readonly data  = inject(TelecomSalesDataService);
   private readonly theme = inject(ThemeService);
   readonly chat          = inject(ChatStateService);
 
   private readonly msgContainer = viewChild<ElementRef>('msgContainer');
   private notifTimer?: ReturnType<typeof setInterval>;
 
-  readonly advisors = this.mock.getAdvisors();
+  readonly advisors = this.data.advisors; // signal => advisors()
 
   readonly kpiCards = [
     { label: "Mon CA Aujourd'hui", value:'1 850DT', sub:'Objectif 2 000DT',     color:'red'    as const, progress:93 },
-    // { label: 'Score Coaching IA',  value:'0.91',   sub:'3 conseils appliqués', color:'green'  as const, trend:{ label:'↑ Top équipe', type:'up' as const } },
-    { label: 'Clients servis',     value:'7',      sub:'Moy. boutique : 5.2',  color:'purple' as const, trend:{ label:'↑ +35%',       type:'up' as const } },
+    { label: 'Clients servis',     value:'7',      sub:'Moy. boutique : 5.2',  color:'purple' as const, trend:{ label:'↑ +35%', type:'up' as const } },
   ];
 
   readonly products = [
@@ -60,13 +60,14 @@ export class AdvisorComponent implements OnInit, OnDestroy, AfterViewChecked {
 
   private pushIndex = 0;
   private readonly pushEvents: Omit<import('../../core/models/models').Notification, 'id' | 'read'>[] = [
-    { type:'traffic',  title:'Trafic en hausse',      message:'+3 visiteurs · Opportunité accessoires',   severity:'amber', time:'' },
-    { type:'coach',    title:'Nouveau conseil IA',     message:'Bundle assurance recommandé · Score 0.89', severity:'blue',  time:'' },
-    { type:'forecast', title:'Prévision mise à jour',  message:'EOD estimé 6 950DT · Tendance haussière',  severity:'green', time:'' },
-    { type:'alert',    title:'Alerte objectif équipe', message:'Amine T. à 37% · Intervention requise',   severity:'red',   time:'' },
+    { type:'traffic',  title:'Trafic en hausse',      message:'+3 visiteurs · Opportunité accessoires',    severity:'amber', time:'' },
+    { type:'coach',    title:'Nouveau conseil IA',    message:'Bundle assurance recommandé · Score 0.89', severity:'blue',  time:'' },
+    { type:'forecast', title:'Prévision mise à jour', message:'EOD estimé 6 950DT · Tendance haussière', severity:'green', time:'' },
+    { type:'alert',    title:'Alerte objectif équipe',message:'Amine T. à 37% · Intervention requise',   severity:'red',   time:'' },
   ];
 
   constructor() {
+    this.data.loadOnce();
     effect(() => { this.chat.messages(); this.scrollBottom(); });
   }
 

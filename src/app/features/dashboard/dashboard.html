@@ -6,23 +6,37 @@
       <span class="breadcrumb">
         Boutiques › <strong>Tunis</strong> › <strong>lac 2</strong>
       </span>
+
       <span class="store-badge">🏪Tunis</span>
-      <span class="sys-badge"><i class="sys-dot"></i> Système nominal</span>
+
+      <span class="sys-badge">
+        <i class="sys-dot"></i> Système nominal
+      </span>
+    </div>
+
+    <!-- Data badge -->
+    <div class="sub-right">
+      <span class="sys-badge data-badge">
+        <i class="sys-dot"></i>
+        Dataset: {{ dataStats().rows | number:'1.0-0':'fr' }} lignes ·
+        Dernier jour: {{ dataStats().lastDay }} ·
+        Store actif: <strong>{{ dataStats().activeStore }}</strong>
+        @if (dataStats().promoActive) { · <strong>Promo Fibre 2Gb</strong> }
+      </span>
     </div>
   </div>
 
   <!-- ── GRID 3 COLONNES ───────────────────────────────────────── -->
   <div class="main-grid">
 
-    <!-- ════════ GAUCHE ════════ -->
+    <!-- ════════ GAUCHE ═══════�� -->
     <div class="left-panel">
 
       <!-- Profil conseiller -->
       <div class="panel-hdr">
         <p class="panel-tag">Interface conseiller · Vue mobile</p>
         <div class="adv-row">
-          <div class="adv-av"
-               style="background:linear-gradient(135deg,#2563eb,#7c3aed)">KB</div>
+          <div class="adv-av" style="background:linear-gradient(135deg,#2563eb,#7c3aed)">KB</div>
           <div>
             <div class="adv-name">Karim Benali</div>
             <div class="adv-role">Conseiller Senior · 5G</div>
@@ -31,34 +45,34 @@
         </div>
       </div>
 
-      <!-- KPI mini strip -->
+      <!-- KPI mini strip (DYNAMIQUE) -->
       <div class="kpi-strip">
         <div class="km">
-          <div class="km-v blue">4 250DT</div>
+          <div class="km-v blue">{{ leftStrip().sales }}</div>
           <div class="km-l">Ventes</div>
         </div>
         <div class="km">
-          <div class="km-v">8 000DT</div>
+          <div class="km-v">{{ leftStrip().target }}</div>
           <div class="km-l">Objectif</div>
         </div>
         <div class="km">
-          <div class="km-v red">−46%</div>
+          <div class="km-v red">{{ leftStrip().gapPctLabel }}</div>
           <div class="km-l">Gap EOD</div>
         </div>
         <div class="km">
-          <div class="km-v">12</div>
+          <div class="km-v">{{ leftStrip().visitors }}</div>
           <div class="km-l">Visiteurs</div>
         </div>
       </div>
 
-      <!-- Progress bar -->
+      <!-- Progress bar (DYNAMIQUE) -->
       <div class="prog-sec">
         <div class="prog-row">
           <span class="prog-lbl">Objectif journalier</span>
-          <span class="prog-pct">53% · 3h28</span>
+          <span class="prog-pct">{{ leftStrip().timeLabel }}</span>
         </div>
         <div class="prog-track">
-          <div class="prog-fill" style="width:53%"></div>
+          <div class="prog-fill" [style.width.%]="leftStrip().progress"></div>
         </div>
       </div>
 
@@ -74,12 +88,11 @@
         <div class="cc-body">
           <div class="ctx-box">🌧 Pluie + trafic élevé → accessoires +40%</div>
           <p class="cc-text">
-            La boutique affiche <strong>12 visiteurs actifs</strong>.
-            Prévision EOD <strong>6 800DT</strong> — effort ciblé requis.
+            La boutique affiche <strong>{{ leftStrip().visitors }} visiteurs actifs</strong>.
+            Prévision EOD <strong>{{ (kpiCards()[1]?.value ?? '—') }}</strong> — effort ciblé requis.
           </p>
           <div class="action-pills">
-            <div class="a-pill"
-                 (click)="useQuick('Script upsell accessoires en cas de pluie ?')">
+            <div class="a-pill" (click)="useQuick('Script upsell accessoires en cas de pluie ?')">
               <div class="a-icon amb">📱</div>
               <div>
                 <div class="a-name">Upsell Accessoires</div>
@@ -87,8 +100,8 @@
               </div>
               <span class="a-badge blue">+40%</span>
             </div>
-            <div class="a-pill"
-                 (click)="useQuick('Argument upgrade 5G Premium pour client 4G ?')">
+
+            <div class="a-pill" (click)="useQuick('Argument upgrade 5G Premium pour client 4G ?')">
               <div class="a-icon grn">📶</div>
               <div>
                 <div class="a-name">Upgrade 5G Premium</div>
@@ -96,8 +109,8 @@
               </div>
               <span class="a-badge green">Prio</span>
             </div>
-            <div class="a-pill"
-                 (click)="useQuick('Script bundle assurance sur ventes élevées ?')">
+
+            <div class="a-pill" (click)="useQuick('Script bundle assurance sur ventes élevées ?')">
               <div class="a-icon pur">🛡</div>
               <div>
                 <div class="a-name">Bundle Assurance</div>
@@ -106,6 +119,7 @@
               <span class="a-badge purple">×2.1</span>
             </div>
           </div>
+
           <div class="fb-row">
             <button class="fb-btn">👍 Utile</button>
             <button class="fb-btn">👎 Non pertinent</button>
@@ -115,7 +129,7 @@
 
       <!-- Alertes -->
       <p class="sec-mini">Alertes</p>
-      @for (al of alerts; track al.title) {
+      @for (al of alerts(); track al.title) {
         <div class="al-item" [class]="al.severity">
           <span class="al-dot"></span>
           <div>
@@ -125,7 +139,6 @@
           </div>
         </div>
       }
-
     </div>
 
     <!-- ════════ CENTRE ════════ -->
@@ -134,14 +147,16 @@
       <!-- KPI Cards -->
       <p class="sec-label">Indicateurs clés · Temps réel</p>
       <div class="kpi-row">
-        @for (card of kpiCards; track card.label) {
+        @for (card of kpiCards(); track card.label) {
           <app-kpi-card [card]="card" />
         }
       </div>
 
+      <!-- Insights -->
+    
+
       <!-- ── GRAPHE TIME SERIES ── -->
       <div class="chart-card">
-
         <div class="chart-hdr">
           <div>
             <div class="chart-title">📈 Évolution CA · Objectif vs Réalisé</div>
@@ -150,19 +165,12 @@
             </div>
           </div>
           <div class="chart-controls">
-            <button class="period-btn"
-              [class.active]="chartPeriod==='7d'"
-              (click)="chartPeriod='7d'">7J</button>
-            <button class="period-btn"
-              [class.active]="chartPeriod==='30d'"
-              (click)="chartPeriod='30d'">30J</button>
-            <button class="period-btn"
-              [class.active]="chartPeriod==='90d'"
-              (click)="chartPeriod='90d'">90J</button>
+            <button class="period-btn" [class.active]="chartPeriod==='7d'" (click)="chartPeriod='7d'">7J</button>
+            <button class="period-btn" [class.active]="chartPeriod==='30d'" (click)="chartPeriod='30d'">30J</button>
+            <button class="period-btn" [class.active]="chartPeriod==='90d'" (click)="chartPeriod='90d'">90J</button>
           </div>
         </div>
 
-        <!-- SVG chart -->
         <div class="chart-body">
           <svg viewBox="0 0 620 148" class="ts-svg" preserveAspectRatio="none">
             <defs>
@@ -176,48 +184,40 @@
               </linearGradient>
             </defs>
 
-            <!-- Grilles -->
             @for (yv of [10, 35, 60, 85]; track yv) {
               <line x1="30" [attr.y1]="yv" x2="608" [attr.y2]="yv"
                     stroke="#E2E8F0" stroke-width="0.7"/>
             }
 
-            <!-- Labels axe Y -->
-            <text x="26" y="13"  text-anchor="end" font-size="7"
+            <text x="26" y="13" text-anchor="end" font-size="7"
                   fill="#94A3B8" font-family="monospace">
               {{ fmtK(maxVal) }}
             </text>
-            <text x="26" y="63"  text-anchor="end" font-size="7"
+            <text x="26" y="63" text-anchor="end" font-size="7"
                   fill="#94A3B8" font-family="monospace">
               {{ fmtKFloor(maxVal / 2) }}
             </text>
-            <text x="26" y="88"  text-anchor="end" font-size="7"
+            <text x="26" y="88" text-anchor="end" font-size="7"
                   fill="#94A3B8" font-family="monospace">
               0
             </text>
 
-            <!-- Area objectif -->
             <path [attr.d]="buildArea(chartData.map(d=>d.objectif), 578, 90)"
                   transform="translate(30,5)"
                   fill="url(#gObj)"/>
-
-            <!-- Area réalisé -->
             <path [attr.d]="buildArea(chartData.map(d=>d.realise), 578, 90)"
                   transform="translate(30,5)"
                   fill="url(#gReal)"/>
 
-            <!-- Ligne objectif tirets -->
             <path [attr.d]="buildPath(chartData.map(d=>d.objectif), 578, 90)"
                   transform="translate(30,5)"
                   fill="none" stroke="#0050D8" stroke-width="1.5"
                   stroke-dasharray="5,3" opacity=".6"/>
 
-            <!-- Ligne réalisé pleine -->
             <path [attr.d]="buildPath(chartData.map(d=>d.realise), 578, 90)"
                   transform="translate(30,5)"
                   fill="none" stroke="#059669" stroke-width="2.5"/>
 
-            <!-- Points + labels -->
             @for (pt of chartData; track pt.label; let i = $index) {
               <g transform="translate(30,5)">
                 <circle
@@ -230,14 +230,17 @@
                   <text
                     [attr.x]="svgX(i, chartData.length, 578)"
                     y="106"
-                    text-anchor="middle" font-size="6.5"
-                    fill="#94A3B8" font-family="monospace">
+                    text-anchor="middle"
+                    font-size="6.5"
+                    fill="#94A3B8"
+                    font-family="monospace">
                     {{ pt.label }}
                   </text>
                   <text
                     [attr.x]="svgX(i, chartData.length, 578)"
                     y="120"
-                    text-anchor="middle" font-size="9">
+                    text-anchor="middle"
+                    font-size="9">
                     {{ meteoIcon(pt.meteo) }}
                   </text>
                 }
@@ -246,21 +249,12 @@
           </svg>
         </div>
 
-        <!-- Footer graphe -->
         <div class="chart-footer">
           <div class="chart-legend">
-            <span class="leg-item">
-              <span class="leg-dash"></span>Objectif
-            </span>
-            <span class="leg-item">
-              <span class="leg-solid"></span>CA Réalisé
-            </span>
-            <span class="leg-item">
-              <span class="leg-dot grn"></span>≥ Objectif
-            </span>
-            <span class="leg-item">
-              <span class="leg-dot red"></span>&lt; Objectif
-            </span>
+            <span class="leg-item"><span class="leg-dash"></span>Objectif</span>
+            <span class="leg-item"><span class="leg-solid"></span>CA Réalisé</span>
+            <span class="leg-item"><span class="leg-dot grn"></span>≥ Objectif</span>
+            <span class="leg-item"><span class="leg-dot red"></span>&lt; Objectif</span>
           </div>
           <div class="chart-stats">
             <span class="cs-item">
@@ -279,7 +273,6 @@
             </span>
           </div>
         </div>
-
       </div>
 
       <!-- Tableau équipe -->
@@ -289,6 +282,7 @@
           <span class="team-title">Conseillers — Lac 2</span>
           <span class="team-meta">4 actifs · Obj 8 000DT</span>
         </div>
+
         <table>
           <thead>
             <tr>
@@ -300,13 +294,11 @@
             </tr>
           </thead>
           <tbody>
-            @for (a of advisors; track a.initials) {
+            @for (a of advisors(); track a.initials) {
               <tr>
                 <td>
                   <div class="adv-cell">
-                    <div class="tc-av" [style.background]="a.avatar">
-                      {{ a.initials }}
-                    </div>
+                    <div class="tc-av" [style.background]="a.avatar">{{ a.initials }}</div>
                     <div>
                       <div class="tc-name">{{ a.name }}</div>
                       <div class="tc-spec">{{ a.specialty }}</div>
@@ -314,38 +306,61 @@
                   </div>
                 </td>
                 <td>
-                  <div class="mono">
-                    {{ a.sales | currency:'EUR':'symbol':'1.0-0':'fr' }}
-                  </div>
-                  <div class="mono-sub">
-                    / {{ a.target | currency:'EUR':'symbol':'1.0-0':'fr' }}
-                  </div>
+                  <div class="mono">{{ a.sales | currency:'TND':'symbol':'1.0-0':'fr' }}</div>
+                  <div class="mono-sub">/ {{ a.target | currency:'TND':'symbol':'1.0-0':'fr' }}</div>
                 </td>
                 <td>
                   <div class="pb-wrap">
                     <div class="pb">
                       <div class="pb-fill"
-                           [style.width.%]="perf(a.sales, a.target)"
-                           [style.background]="perfColor(perf(a.sales, a.target))">
+                          [style.width.%]="perfPct(a)"
+                          [style.background]="perfColor(perfPct(a))">
                       </div>
                     </div>
-                    <span class="mono"
-                          [style.color]="perfColor(perf(a.sales, a.target))">
-                      {{ perf(a.sales, a.target) }}%
+                    <span class="mono" [style.color]="perfColor(perfPct(a))">
+                      {{ perfPct(a) }}%
                     </span>
                   </div>
                 </td>
                 <td>
-                  <span class="mono"
-                        [style.color]="perfColor(perf(a.forecast, a.target))">
-                    {{ a.forecast | currency:'EUR':'symbol':'1.0-0':'fr' }}
+                  <span class="mono" [style.color]="perfColor(perf(a.forecast, a.target))">
+                    {{ a.forecast | currency:'TND':'symbol':'1.0-0':'fr' }}
                   </span>
                 </td>
                 <td>
-                  <span class="st-pill" [class]="a.status">
-                    {{ statusLabel(a.status) }}
-                  </span>
+                  <span class="st-pill" [class]="a.status">{{ statusLabel(a.status) }}</span>
                 </td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Top produits -->
+      <p class="sec-label">Top produits · Store actif</p>
+      <div class="team-card">
+        <div class="team-hdr">
+          <span class="team-title">Top 5 produits</span>
+          <span class="team-meta">
+            Orders: {{ dataStats().ordersActive }} ·
+            CA: {{ (dataStats().revenueActive | number:'1.0-0':'fr') }}DT
+          </span>
+        </div>
+
+        <table>
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Produit</th>
+              <th>CA</th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (p of topProducts(); track p.product) {
+              <tr>
+                <td><span class="mono">{{ p.rank }}</span></td>
+                <td>{{ p.product }}</td>
+                <td><span class="mono">{{ p.revenueLabel }}</span></td>
               </tr>
             }
           </tbody>
@@ -377,8 +392,7 @@
       <div class="chat-msgs" #msgContainer>
         @for (msg of chat.messages(); track msg.id) {
           <div class="msg-wrap" [class.is-user]="msg.role === 'user'">
-            <div class="msg-av"
-                 [class]="msg.role === 'ai' ? 'ai-av' : 'usr-av'">
+            <div class="msg-av" [class]="msg.role === 'ai' ? 'ai-av' : 'usr-av'">
               {{ msg.role === 'ai' ? '🤖' : 'KB' }}
             </div>
             <div class="msg-content">
@@ -386,13 +400,9 @@
                 <span [innerHTML]="msg.content | markdown"></span>
               </div>
               <div class="msg-meta">
-                <span class="msg-time">
-                  {{ msg.timestamp | date:'HH:mm' }}
-                </span>
+                <span class="msg-time">{{ msg.timestamp | date:'HH:mm' }}</span>
                 @if (msg.auditScore) {
-                  <span class="audit-badge">
-                    ✓ Audit {{ msg.auditScore | number:'1.2-2' }}
-                  </span>
+                  <span class="audit-badge">✓ Audit {{ msg.auditScore | number:'1.2-2' }}</span>
                 }
                 @if (msg.role === 'ai') {
                   <button class="fb-mini"
@@ -411,9 +421,7 @@
           <div class="msg-wrap">
             <div class="msg-av ai-av">🤖</div>
             <div class="typing-bubble">
-              <span class="t-dot"></span>
-              <span class="t-dot"></span>
-              <span class="t-dot"></span>
+              <span class="t-dot"></span><span class="t-dot"></span><span class="t-dot"></span>
             </div>
           </div>
         }
@@ -443,8 +451,8 @@
             (keydown.enter)="onEnter($event)">
           </textarea>
           <button class="send-btn"
-                  [disabled]="chat.isLoading()"
-                  (click)="sendMessage()">
+            [disabled]="chat.isLoading()"
+            (click)="sendMessage()">
             <svg width="13" height="13" viewBox="0 0 24 24" fill="none"
                  stroke="white" stroke-width="2.5" stroke-linecap="round">
               <line x1="22" y1="2" x2="11" y2="13"/>
@@ -452,10 +460,11 @@
             </svg>
           </button>
         </div>
+
         <div class="input-footer">
           <span class="input-hint">↵ Envoyer · Shift+↵ Nouvelle ligne</span>
           <div class="ctx-tags">
-            <span class="ctx-tag">Paris 15</span>
+            <span class="ctx-tag">Lac 2</span>
             <span class="ctx-tag">Karim B.</span>
           </div>
         </div>
