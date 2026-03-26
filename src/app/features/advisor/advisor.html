@@ -20,6 +20,58 @@
     <!-- ══ GAUCHE — Profil + KPIs mobile ══ -->
     <div class="left-panel">
 
+      <!-- Indicateurs clés -->
+      <div class="kpi-indicators">
+        <div class="kpi-ind-row">
+          <div class="kpi-ind c-blue">
+            <div class="kpi-ind-icon" style="background:#EFF6FF;color:#2563EB">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round">
+                <line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>
+              </svg>
+            </div>
+            <div class="kpi-ind-body">
+              <div class="kpi-ind-val" style="color:#2563EB">1 850€</div>
+              <div class="kpi-ind-lbl">Mon CA</div>
+            </div>
+          </div>
+          <div class="kpi-ind c-green">
+            <div class="kpi-ind-icon" style="background:#F0FDF4;color:#059669">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round">
+                <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>
+              </svg>
+            </div>
+            <div class="kpi-ind-body">
+              <div class="kpi-ind-val" style="color:#059669">0.91</div>
+              <div class="kpi-ind-lbl">Score IA</div>
+            </div>
+          </div>
+        </div>
+        <div class="kpi-ind-row">
+          <div class="kpi-ind c-purple">
+            <div class="kpi-ind-icon" style="background:#EDE9FE;color:#7C3AED">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round">
+                <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+              </svg>
+            </div>
+            <div class="kpi-ind-body">
+              <div class="kpi-ind-val" style="color:#7C3AED">7</div>
+              <div class="kpi-ind-lbl">Clients</div>
+            </div>
+          </div>
+          <div class="kpi-ind c-orange">
+            <div class="kpi-ind-icon" style="background:#FFF7ED;color:#F97316">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round">
+                <circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>
+              </svg>
+            </div>
+            <div class="kpi-ind-body">
+              <div class="kpi-ind-val" style="color:#F97316">93%</div>
+              <div class="kpi-ind-lbl">Objectif</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
       <div class="mobile-card">
         <div class="mobile-hdr">
           <div class="mobile-notch"></div>
@@ -75,6 +127,9 @@
               </div>
               <div class="prod-right">
                 <div class="prod-price">{{ p.price }}</div>
+                <span class="margin-pill" [class]="p.margin === 'Élevée' || p.margin === 'Haute' ? 'margin-high' : 'margin-med'">
+                  {{ p.margin === 'Élevée' || p.margin === 'Haute' ? '↑' : '→' }} {{ p.margin }}
+                </span>
                 @if (p.hot) { <span class="hot-pill">🔥</span> }
               </div>
             </div>
@@ -139,7 +194,10 @@
                 </td>
                 <td>
                   <span class="st-pill" [class]="a.status">
-                    {{ ({sent:'⏱ Envoyé', urgent:'🔴 Urgent', waiting:'⏳ Attente'})[a.status] }}
+                    @if (a.status === 'sent')    { <span class="st-dot-sm amber-dot"></span> }
+                    @if (a.status === 'urgent')  { <span class="st-dot-sm red-dot"></span>   }
+                    @if (a.status === 'waiting') { <span class="st-dot-sm gray-dot"></span>  }
+                    {{ ({sent:'Envoyé', urgent:'Urgent', waiting:'Attente'})[a.status] }}
                   </span>
                 </td>
               </tr>

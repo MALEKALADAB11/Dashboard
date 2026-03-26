@@ -23,5 +23,12 @@ export const routes: Routes = [
         .then(m => m.ChatPanelComponent),
     title: 'CoachAgent Chat — AI Sales Coach'
   },
+  {
+    path: 'monitoring',
+    loadComponent: () =>
+      import('./features/monitoring/monitoring')
+        .then(m => m.MonitoringComponent),
+    title: 'Monitoring Agents — AI Sales Coach'
+  },
   { path: '**', redirectTo: 'dashboard' }
 ];
