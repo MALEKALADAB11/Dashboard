@@ -161,9 +161,13 @@ export class MonitoringComponent {
   get offlineCount(): number { return this.agents.filter(a => a.status === 'HORS LIGNE').length; }
 
   get allAlerts(): (AgentAlert & { agentName: string })[] {
+    const toMins = (t: string) => {
+      const [h, m] = t.split(':').map(Number);
+      return h * 60 + m;
+    };
     return this.agents
       .flatMap(a => a.alerts.map(al => ({ ...al, agentName: a.name })))
-      .sort((a, b) => b.time.localeCompare(a.time))
+      .sort((a, b) => toMins(b.time) - toMins(a.time))
       .slice(0, 8);
   }
 
