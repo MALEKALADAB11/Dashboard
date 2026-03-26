@@ -1,5 +1,5 @@
 import { Component, signal, computed } from '@angular/core';
-import { CommonModule, CurrencyPipe } from '@angular/common';
+import { CommonModule, CurrencyPipe, DatePipe } from '@angular/common';
 
 export type AgentStatus = 'LIVE' | 'ACTIF' | 'RUN' | 'HORS LIGNE';
 
@@ -36,12 +36,13 @@ export interface AgentData {
 @Component({
   selector: 'app-monitoring',
   standalone: true,
-  imports: [CommonModule, CurrencyPipe],
+  imports: [CommonModule, CurrencyPipe, DatePipe],
   templateUrl: './monitoring.html',
   styleUrl: './monitoring.scss',
 })
 export class MonitoringComponent {
 
+  readonly lastUpdate = new Date();
   readonly activeFilter = signal<'Tous' | AgentStatus>('Tous');
 
   readonly agents: AgentData[] = [
@@ -161,9 +162,12 @@ export class MonitoringComponent {
   get offlineCount(): number { return this.agents.filter(a => a.status === 'HORS LIGNE').length; }
 
   get allAlerts(): (AgentAlert & { agentName: string })[] {
-    const toMins = (t: string) => {
-      const [h, m] = t.split(':').map(Number);
-      return h * 60 + m;
+    const toMins = (t: string): number => {
+      const parts = t.split(':');
+      if (parts.length !== 2) return 0;
+      const h = parseInt(parts[0], 10);
+      const m = parseInt(parts[1], 10);
+      return (isNaN(h) || isNaN(m)) ? 0 : h * 60 + m;
     };
     return this.agents
       .flatMap(a => a.alerts.map(al => ({ ...al, agentName: a.name })))
