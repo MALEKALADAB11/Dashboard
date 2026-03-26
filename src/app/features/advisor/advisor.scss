@@ -1296,3 +1296,55 @@ tbody td {
 .notifs-empty span {
   font-size: 28px;
 }
+/* ── KPI INDICATORS ─────────────────────────────────────────── */
+.kpi-indicators {
+  padding: 10px 12px;
+  background: #fff;
+  border-bottom: 1px solid var(--n-300);
+  flex-shrink: 0;
+}
+.kpi-ind-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 6px;
+  margin-bottom: 6px;
+}
+.kpi-ind-row:last-child { margin-bottom: 0; }
+.kpi-ind {
+  display: flex; align-items: center; gap: 8px;
+  padding: 8px 10px; border-radius: 8px;
+  border: 1px solid var(--n-300); background: var(--n-100);
+  transition: .15s;
+}
+.kpi-ind:hover { box-shadow: var(--sh-xs); }
+.kpi-ind-icon {
+  width: 28px; height: 28px; border-radius: 7px;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+}
+.kpi-ind-val {
+  font-family: var(--font-mono); font-size: 14px;
+  font-weight: 700; line-height: 1.1;
+}
+.kpi-ind-lbl {
+  font-size: 9px; color: var(--n-500);
+  text-transform: uppercase; letter-spacing: .06em; font-weight: 600;
+}
+
+/* ── MARGIN PILLS ───────────────────────────────────────────── */
+.margin-pill {
+  display: inline-block; padding: 1px 5px;
+  border-radius: 4px; font-size: 8.5px; font-weight: 600;
+}
+.margin-pill.margin-high { background: #F0FDF4; color: #059669; border: 1px solid #D1FAE5; }
+.margin-pill.margin-med  { background: #FFFBEB; color: #D97706; border: 1px solid #FEF3C7; }
+
+/* ── STATUS DOT in ST-PILL ──────────────────────────────────── */
+.st-dot-sm {
+  display: inline-block; width: 6px; height: 6px;
+  border-radius: 50%; flex-shrink: 0; vertical-align: middle;
+  margin-right: 3px;
+}
+.amber-dot { background: var(--amber); }
+.red-dot   { background: var(--red-600); }
+.gray-dot  { background: var(--n-500); }

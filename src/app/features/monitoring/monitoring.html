@@ -1,0 +1,218 @@
+<div class="mon-layout">
+
+  <!-- SUBHEADER -->
+  <div class="subhdr">
+    <div class="sub-left">
+      <span class="breadcrumb">Dashboard › <strong>Monitoring des Agents</strong></span>
+      <span class="mon-badge">📡 Temps réel</span>
+      <span class="sys-badge"><i class="sys-dot"></i> Système nominal</span>
+    </div>
+    <div class="sub-right">
+      <span class="upd-time">Mis à jour 14:33</span>
+    </div>
+  </div>
+
+  <div class="mon-body">
+
+    <!-- STATS ROW -->
+    <div class="stats-row">
+      <div class="stat-card">
+        <div class="stat-icon" style="background:#EFF6FF;color:#2563EB">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/>
+          </svg>
+        </div>
+        <div class="stat-info">
+          <div class="stat-val">{{ agents.length }}</div>
+          <div class="stat-lbl">Total Agents</div>
+        </div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon" style="background:#F0FDF4;color:#10B981">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M4.22 4.22l2.12 2.12M17.66 17.66l2.12 2.12M2 12h3M19 12h3M4.22 19.78l2.12-2.12M17.66 6.34l2.12-2.12"/>
+          </svg>
+        </div>
+        <div class="stat-info">
+          <div class="stat-val" style="color:#10B981">{{ liveCount }}</div>
+          <div class="stat-lbl">Agents LIVE</div>
+        </div>
+        <span class="stat-pulse"></span>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon" style="background:#EFF6FF;color:#2563EB">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>
+          </svg>
+        </div>
+        <div class="stat-info">
+          <div class="stat-val" style="color:#2563EB">{{ actifCount }}</div>
+          <div class="stat-lbl">Agents Actifs</div>
+        </div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon" style="background:#FEF2F2;color:#EF4444">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M18.36 6.64A9 9 0 1 1 5.64 17.36"/><path d="M12 2v10"/>
+          </svg>
+        </div>
+        <div class="stat-info">
+          <div class="stat-val" style="color:#EF4444">{{ offlineCount }}</div>
+          <div class="stat-lbl">Hors Ligne</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- FILTER BUTTONS -->
+    <div class="filter-bar">
+      <span class="filter-lbl">Filtrer :</span>
+      @for (f of filters; track f) {
+        <button class="filter-btn"
+          [class.active]="activeFilter() === f"
+          [attr.data-status]="f"
+          (click)="setFilter(f)">
+          @if (f === 'LIVE') { <span class="filter-dot live-dot-sm"></span> }
+          {{ f }}
+        </button>
+      }
+    </div>
+
+    <!-- MAIN GRID -->
+    <div class="two-col">
+
+      <!-- AGENT GRID -->
+      <div class="agent-section">
+        <p class="sec-label">Agents · {{ filteredAgents().length }} affiché{{ filteredAgents().length > 1 ? 's' : '' }}</p>
+        <div class="agent-grid">
+          @for (agent of filteredAgents(); track agent.id) {
+            <div class="agent-card" [class.offline]="agent.status === 'HORS LIGNE'">
+
+              <!-- Card top -->
+              <div class="ac-top">
+                <div class="ac-avatar" [style.background]="agent.avatarColor">{{ agent.initials }}</div>
+                <div class="ac-info">
+                  <div class="ac-name">{{ agent.name }}</div>
+                  <div class="ac-spec">{{ agent.specialty }}</div>
+                  <div class="ac-loc">📍 {{ agent.location }}</div>
+                </div>
+                <div class="ac-status-wrap">
+                  <span class="status-badge" [attr.data-status]="agent.status">
+                    @if (agent.status === 'LIVE') { <span class="pulse-ring"></span> }
+                    {{ agent.status }}
+                  </span>
+                  @if (agent.alertCount > 0) {
+                    <span class="alert-count">{{ agent.alertCount }}</span>
+                  }
+                </div>
+              </div>
+
+              <!-- KPI Row -->
+              <div class="ac-kpis">
+                <div class="ac-kpi">
+                  <div class="ac-kpi-val" [style.color]="perfColor(perfPct(agent.kpi.ca, agent.kpi.caObjectif))">
+                    {{ agent.kpi.ca | currency:'EUR':'symbol':'1.0-0':'fr' }}
+                  </div>
+                  <div class="ac-kpi-lbl">CA réalisé</div>
+                </div>
+                <div class="ac-kpi">
+                  <div class="ac-kpi-val" style="color:#64748B">
+                    {{ agent.kpi.caObjectif | currency:'EUR':'symbol':'1.0-0':'fr' }}
+                  </div>
+                  <div class="ac-kpi-lbl">Objectif</div>
+                </div>
+                <div class="ac-kpi">
+                  <div class="ac-kpi-val" [style.color]="scoreColor(agent.kpi.score)">
+                    {{ agent.kpi.score | number:'1.2-2' }}
+                  </div>
+                  <div class="ac-kpi-lbl">Score IA</div>
+                </div>
+                <div class="ac-kpi">
+                  <div class="ac-kpi-val" style="color:#7C3AED">{{ agent.kpi.clients }}</div>
+                  <div class="ac-kpi-lbl">Clients</div>
+                </div>
+              </div>
+
+              <!-- Progress bar -->
+              <div class="ac-progress">
+                <div class="ac-prog-row">
+                  <span class="ac-prog-lbl">Atteinte objectif</span>
+                  <span class="ac-prog-pct" [style.color]="perfColor(perfPct(agent.kpi.ca, agent.kpi.caObjectif))">
+                    {{ perfPct(agent.kpi.ca, agent.kpi.caObjectif) }}%
+                  </span>
+                </div>
+                <div class="ac-prog-track">
+                  <div class="ac-prog-fill"
+                    [style.width.%]="perfPct(agent.kpi.ca, agent.kpi.caObjectif)"
+                    [style.background]="perfColor(perfPct(agent.kpi.ca, agent.kpi.caObjectif))">
+                  </div>
+                </div>
+              </div>
+
+              <!-- Mini bar chart -->
+              <div class="ac-chart-wrap">
+                <div class="ac-chart-lbl">Activité (8 dernières heures)</div>
+                <div class="ac-chart">
+                  @for (val of agent.hourlyActivity; track $index) {
+                    <div class="ac-bar-wrap">
+                      <div class="ac-bar"
+                        [style.height.%]="val === 0 ? 4 : (val / barMaxPx(agent.hourlyActivity)) * 100"
+                        [style.background]="agent.status === 'HORS LIGNE' ? '#CBD5E1' : perfColor(perfPct(agent.kpi.ca, agent.kpi.caObjectif))">
+                      </div>
+                    </div>
+                  }
+                </div>
+              </div>
+
+              <!-- Footer -->
+              <div class="ac-footer">
+                <span class="ac-last">🕐 {{ agent.lastActivity }}</span>
+                <button class="ac-detail-btn">Voir détail →</button>
+              </div>
+
+            </div>
+          }
+        </div>
+      </div>
+
+      <!-- ALERT FEED -->
+      <div class="feed-section">
+        <p class="sec-label">Flux d'alertes · Temps réel</p>
+        <div class="alert-feed">
+          @for (al of allAlerts; track al.id) {
+            <div class="feed-item" [attr.data-sev]="al.severity">
+              <div class="fi-icon">{{ severityIcon(al.severity) }}</div>
+              <div class="fi-body">
+                <div class="fi-agent">{{ al.agentName }}</div>
+                <div class="fi-title">{{ al.title }}</div>
+                <div class="fi-msg">{{ al.message }}</div>
+              </div>
+              <div class="fi-time">{{ al.time }}</div>
+            </div>
+          }
+        </div>
+
+        <!-- Agent history -->
+        <p class="sec-label" style="margin-top:20px">Historique activité</p>
+        <div class="history-list">
+          @for (agent of agents; track agent.id) {
+            <div class="hist-row" [class.offline]="agent.status === 'HORS LIGNE'">
+              <div class="hist-av" [style.background]="agent.avatarColor">{{ agent.initials }}</div>
+              <div class="hist-info">
+                <div class="hist-name">{{ agent.name }}</div>
+                <div class="hist-last">{{ agent.lastActivity }}</div>
+              </div>
+              <div class="hist-kpi">
+                <span class="hist-ca">{{ agent.kpi.ca | currency:'EUR':'symbol':'1.0-0':'fr' }}</span>
+                <span class="hist-pct" [style.color]="perfColor(perfPct(agent.kpi.ca, agent.kpi.caObjectif))">
+                  {{ perfPct(agent.kpi.ca, agent.kpi.caObjectif) }}%
+                </span>
+              </div>
+              <span class="hist-status" [attr.data-status]="agent.status">{{ agent.status }}</span>
+            </div>
+          }
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>

@@ -84,14 +84,21 @@
         </div>
 
         <!-- Alertes -->
-        <p class="sec-mini">Alertes</p>
+        <p class="sec-mini">Alertes · Priorité</p>
         @for (al of alerts; track al.title) {
           <div class="al-item" [class]="al.severity">
-            <span class="al-dot"></span>
-            <div>
-              <div class="al-title">{{ al.title }}</div>
+            <div class="al-left">
+              <span class="al-dot"></span>
+            </div>
+            <div class="al-body">
+              <div class="al-top-row">
+                <div class="al-title">{{ al.title }}</div>
+                <span class="al-badge" [class]="al.severity">
+                  {{ al.severity === 'red' ? 'Urgent' : 'Info' }}
+                </span>
+              </div>
               <div class="al-desc">{{ al.desc }}</div>
-              <div class="al-time">{{ al.time }}</div>
+              <div class="al-time">🕐 {{ al.time }}</div>
             </div>
           </div>
         }
@@ -105,16 +112,32 @@
       <div class="kpi-row">
         @for (card of kpiCards; track card.label) {
           <div class="kpi-card" [class]="'c-' + card.color">
-            <div class="kc-lbl">{{ card.label }}</div>
+            <div class="kc-top">
+              <div class="kc-icon-wrap" [class]="'icon-' + card.color">
+                @if (card.color === 'blue') {
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+                }
+                @if (card.color === 'amber') {
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+                }
+                @if (card.color === 'green') {
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                }
+                @if (card.color === 'purple') {
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+                }
+              </div>
+              <div class="kc-lbl">{{ card.label }}</div>
+            </div>
             <div class="kc-val">{{ card.value }}</div>
             <div class="kc-sub">{{ card.sub }}</div>
             <div class="kc-foot">
               @if (card.progress !== undefined) {
-                <div class="kc-prog"><div class="kc-bar" [style.width.%]="card.progress"></div></div>
+                <div class="kc-prog"><div class="kc-bar" [style.width.%]="card.progress" [class]="'bar-' + card.color"></div></div>
                 <span class="kc-pct">{{ card.progress }}%</span>
               }
               @if (card.trend) {
-                <span class="kc-trend" [class]="card.trend">{{ card.trend }}</span>
+                <span class="kc-trend" [class]="card.trend.type">{{ card.trend.label }}</span>
               }
             </div>
           </div>

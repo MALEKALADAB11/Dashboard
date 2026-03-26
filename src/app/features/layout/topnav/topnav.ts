@@ -37,6 +37,7 @@ export class TopnavComponent {
   readonly links = [
     { path: '/dashboard',  label: 'Tableau de bord'     },
     { path: '/conseiller', label: 'Interface Conseiller' },
+    { path: '/monitoring', label: 'Monitoring Agents'    },
     { path: '/chat',       label: 'CoachAgent Chat'      },
   ];
 }
