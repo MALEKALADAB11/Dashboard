@@ -121,6 +121,106 @@
         }
       </div>
 
+      <!-- ── Hourly Sales vs Forecast ─────────────────────────── -->
+      <p class="sec-label">Ventes Horaires vs Prévision</p>
+      <div class="chart-card" [class.chart-zoomed]="chartZoomed">
+        <div class="chart-hdr">
+          <div class="chart-hdr-info">
+            <span class="chart-title">Réalisé vs Prévision</span>
+            <span class="chart-sub">Aujourd'hui · auto</span>
+          </div>
+          <div class="chart-hdr-controls">
+            <div class="range-pills">
+              <button class="rp" [class.active]="selectedRange==='3h'" (click)="setRange('3h')">3h</button>
+              <button class="rp" [class.active]="selectedRange==='6h'" (click)="setRange('6h')">6h</button>
+              <button class="rp" [class.active]="selectedRange==='all'" (click)="setRange('all')">Tout</button>
+            </div>
+            <button class="zoom-btn" (click)="toggleZoom()" [title]="chartZoomed ? 'Réduire' : 'Agrandir'">
+              {{ chartZoomed ? '⊖' : '⊕' }}
+            </button>
+          </div>
+        </div>
+
+        <div class="chart-legend">
+          <span class="leg actual-leg">■ Réalisé</span>
+          <span class="leg forecast-leg">■ Prévision</span>
+          @if (selectedHourIdx !== null) {
+            <span class="leg selected-leg">📍 {{ allHourly[selectedHourIdx].hour }}
+              · {{ allHourly[selectedHourIdx].actual ?? '—' }}€ /
+              {{ allHourly[selectedHourIdx].forecast }}€</span>
+          }
+        </div>
+
+        <div class="bar-chart">
+          @for (d of filteredHourly; track d.idx) {
+            <div class="bar-group" [class.bar-selected]="selectedHourIdx === d.idx"
+                 (click)="selectBar(d.idx)">
+              <div class="bars">
+                <div class="bar actual-bar" [style.height.%]="barH(d.actual)">
+                  <span class="bar-tip">{{ d.actual !== null ? (d.actual + '€') : '—' }}</span>
+                </div>
+                <div class="bar forecast-bar" [style.height.%]="barH(d.forecast)">
+                  <span class="bar-tip">{{ d.forecast }}€</span>
+                </div>
+              </div>
+              <div class="bar-lbl">{{ d.hour }}</div>
+            </div>
+          }
+        </div>
+      </div>
+
+      <!-- ── Context Risk Heatmap ──────────────────────────────── -->
+      <p class="sec-label">Carte de Risque Contextuelle</p>
+      <div class="heat-card">
+        <div class="chart-hdr">
+          <div class="chart-hdr-info">
+            <span class="chart-title">Risques Équipe</span>
+            <span class="chart-sub">Temps réel · 4 conseillers</span>
+          </div>
+          <div class="risk-filters">
+            <button class="rf" [class.active]="selectedRiskFilter==='all'"    (click)="setRiskFilter('all')">Tous</button>
+            <button class="rf rf-high"   [class.active]="selectedRiskFilter==='high'"   (click)="setRiskFilter('high')">Critique</button>
+            <button class="rf rf-medium" [class.active]="selectedRiskFilter==='medium'" (click)="setRiskFilter('medium')">Modéré</button>
+            <button class="rf rf-low"    [class.active]="selectedRiskFilter==='low'"    (click)="setRiskFilter('low')">Faible</button>
+          </div>
+        </div>
+
+        <div class="heatmap">
+          <div class="hm-row hm-head">
+            <div class="hm-name-cell"></div>
+            @for (cat of heatCats; track cat) {
+              <div class="hm-cat">{{ cat }}</div>
+            }
+          </div>
+          @for (row of filteredHeat; track row.name; let ri = $index) {
+            <div class="hm-row">
+              <div class="hm-name">{{ row.name }}</div>
+              @for (val of row.data; track $index; let ci = $index) {
+                <div class="hm-cell risk-{{ riskLevel(val) }}"
+                     [class.hm-hover]="hoveredCell?.row === ri && hoveredCell?.col === ci"
+                     (mouseenter)="hoverHeat(ri, ci)"
+                     (mouseleave)="hoverHeat(null, null)">
+                  <span class="hm-v">{{ val }}</span>
+                  <div class="hm-tip">
+                    <div class="hmt-cat">{{ heatCats[ci] }}</div>
+                    <div class="hmt-who">{{ row.full }}</div>
+                    <div class="hmt-lvl risk-txt-{{ riskLevel(val) }}">{{ riskLabel(val) }}</div>
+                  </div>
+                </div>
+              }
+            </div>
+          }
+        </div>
+
+        <div class="heat-legend">
+          <span class="hl-item risk-none">■ OK</span>
+          <span class="hl-item risk-low">■ Faible</span>
+          <span class="hl-item risk-medium">■ Élevé</span>
+          <span class="hl-item risk-high">■ Critique</span>
+          <span class="hl-item risk-critical">■ Extrême</span>
+        </div>
+      </div>
+
       <p class="sec-label">Performance équipe</p>
       <div class="team-card">
         <div class="team-hdr">
